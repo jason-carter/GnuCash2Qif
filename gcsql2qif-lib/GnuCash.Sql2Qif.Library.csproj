@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <RootNamespace>GnuCash.Sql2Qif.Library</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GnuCash.Sql2Qif.BLL\GnuCash.Sql2Qif.Library.BLL.csproj" />
+    <ProjectReference Include="..\GnuCash.Sql2Qif.Library.DAL\GnuCash.Sql2Qif.Library.DAL.csproj" />
+  </ItemGroup>
+
+</Project>

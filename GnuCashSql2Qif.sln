@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.156
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GnuCashSql2Qif", "GnuCashSql2Qif\GnuCashSql2Qif.csproj", "{DBCBD75D-B400-44B3-AAB6-A9C834F5D541}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GnuCash.Sql2Qif.Library", "gcsql2qif-lib\GnuCash.Sql2Qif.Library.csproj", "{4380604F-4064-47D8-B8C4-CB5F80451450}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GnuCash.Sql2Qif.Library.DAL", "GnuCash.Sql2Qif.Library.DAL\GnuCash.Sql2Qif.Library.DAL.csproj", "{0F2C119C-C9CA-4916-B5F1-6DFEEF92F144}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GnuCash.Sql2Qif.Library.BLL", "GnuCash.Sql2Qif.BLL\GnuCash.Sql2Qif.Library.BLL.csproj", "{E93F92BA-F37C-47F7-BE9A-0B600DDD39EB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DBCBD75D-B400-44B3-AAB6-A9C834F5D541}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBCBD75D-B400-44B3-AAB6-A9C834F5D541}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBCBD75D-B400-44B3-AAB6-A9C834F5D541}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBCBD75D-B400-44B3-AAB6-A9C834F5D541}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4380604F-4064-47D8-B8C4-CB5F80451450}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4380604F-4064-47D8-B8C4-CB5F80451450}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4380604F-4064-47D8-B8C4-CB5F80451450}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4380604F-4064-47D8-B8C4-CB5F80451450}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F2C119C-C9CA-4916-B5F1-6DFEEF92F144}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F2C119C-C9CA-4916-B5F1-6DFEEF92F144}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F2C119C-C9CA-4916-B5F1-6DFEEF92F144}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F2C119C-C9CA-4916-B5F1-6DFEEF92F144}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E93F92BA-F37C-47F7-BE9A-0B600DDD39EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E93F92BA-F37C-47F7-BE9A-0B600DDD39EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E93F92BA-F37C-47F7-BE9A-0B600DDD39EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E93F92BA-F37C-47F7-BE9A-0B600DDD39EB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {84B85D69-0C01-4D1E-9BCD-3A40933A9431}
+	EndGlobalSection
+EndGlobal

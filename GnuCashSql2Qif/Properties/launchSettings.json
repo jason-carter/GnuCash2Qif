@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "GnuCashSql2Qif": {
+      "commandName": "Project",
+      "commandLineArgs": "\"C:/Users/jjcar/Downloads/gnucashtoqif/20190518 accounts.sql.gnucash.sqlite\" \"C:/Users/jjcar/Downloads/gnucashtoqif/output.qif\""
+    }
+  }
+}
