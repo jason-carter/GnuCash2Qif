@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Data.SQLite;
 using GnuCash.Sql2Qif.Library.BLL;
+using System.Linq;
 
 namespace GnuCash.Sql2Qif.Library.DAL
 {
@@ -72,39 +71,27 @@ namespace GnuCash.Sql2Qif.Library.DAL
                         var trx = new Transaction
                         {
                             TransactionGuid = reader["guid"].ToString()
-
                         };
+                        var isExistingTrx = false;
 
-                        //var accountType = reader["account_type"].ToString();
+                        // Check for existing transaction in list - use if it exists
+                        var trxLookup = transactions.Where<ITransaction>(t => t.TransactionGuid == trx.TransactionGuid).FirstOrDefault<ITransaction>(); // should only be one trx entry
 
-                        //switch (accountType)
-                        //{
-                        //    case "ASSET":
-                        //    case "CREDIT":
-                        //    case "BANK":
-                        //        accounts.Add(new Account
-                        //        {
-                        //            Guid = reader["guid"].ToString(),
-                        //            Name = reader["path"].ToString(),
-                        //            Description = reader["description"].ToString(),
-                        //            AccountType = reader["account_type"].ToString(),
-                        //            Hierarchy = reader["hierarchy"].ToString()
-                        //        });
-                        //        break;
-                        //    case "EXPENSE":
-                        //    case "INCOME":
-                        //        accounts.Add(new Category
-                        //        {
-                        //            Guid = reader["guid"].ToString(),
-                        //            Name = reader["path"].ToString(),
-                        //            Description = reader["description"].ToString(),
-                        //            AccountType = reader["account_type"].ToString(),
-                        //            Hierarchy = reader["hierarchy"].ToString()
-                        //        });
-                        //        break;
-                        //}
+                        if (trxLookup != null)
+                        {
+                            // transaction already on the list, so use the exisitng reference and enrich it
+                            trx = (Transaction) trxLookup;
+                            isExistingTrx = true;
+                        }
 
-                        transactions.Add(trx);
+                        // Lookup the account and add transaction to the account's list
+
+                        // Lookup the category and add to the transaction
+
+                        if (!isExistingTrx)
+                        {
+                            transactions.Add(trx);
+                        }
                     }
                 }
             }

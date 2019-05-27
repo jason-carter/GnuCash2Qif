@@ -26,6 +26,9 @@ namespace GnuCash.Sql2Qif.Library
 
             // Extract the Transactions
 
+            var trxDAO = new TransactionDAO();
+            List<ITransaction> transactions = trxDAO.Extract(dataSource, accounts).ToList<ITransaction>();
+
             // Output the Transactions
         }
 

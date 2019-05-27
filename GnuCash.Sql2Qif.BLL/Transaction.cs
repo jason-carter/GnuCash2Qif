@@ -6,18 +6,18 @@ namespace GnuCash.Sql2Qif.Library.BLL
 {
     public class Transaction : ITransaction
     {
-        public string TransactionGuid { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public DateTime DatePosted { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public int ChequeNumber { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public string Description { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public string Memo { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public IEnumerable<IAccount> Categories { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public string Reconciled { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public decimal Value { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string TransactionGuid { get; set; }
+        public DateTime DatePosted { get; set; }
+        public int ChequeNumber { get; set; }
+        public string Description { get; set; }
+        public string Memo { get; set; }
+        public IEnumerable<IAccount> Categories { get; set; }
+        public string Reconciled { get; set; }
+        public decimal Value { get; set; }
 
         public string QifOutput()
         {
-            throw new NotImplementedException();
+            return "";
         }
     }
 }
