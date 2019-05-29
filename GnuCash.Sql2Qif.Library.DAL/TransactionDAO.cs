@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Data.SQLite;
+﻿using System;
 using GnuCash.Sql2Qif.Library.BLL;
+using System.Collections.Generic;
+using System.Data.SQLite;
 using System.Linq;
+using System.Globalization;
 
 namespace GnuCash.Sql2Qif.Library.DAL
 {
@@ -34,14 +36,16 @@ namespace GnuCash.Sql2Qif.Library.DAL
                 where acc.account_type in ('ASSET', 'CREDIT', 'BANK')
             )
             select
-                            t.guid,
-                            acc.name        as AccountName,
-                            t.post_date   as DatePosted,
+                            t.guid              as TrxGuid,
+                            acc.guid            as AccGuid,
+                            acc.name            as AccountName,
+                            t.post_date         as DatePosted,
                             t.Num,
                             t.Description,
-                            sl.string_val   as Notes,
-                            cat.name as Transfer,
-                            s.reconcile_state as isReconciled,
+                            sl.string_val       as Notes,
+                            cat.guid            as CategoryGuid,
+                            cat.name            as Transfer,
+                            s.reconcile_state   as isReconciled,
                             case acc.account_type
                                 when 'EQUITY' then ROUND((s.value_num / -100.0), 2)
                                 else ROUND((s.value_num / 100.0), 2)
@@ -55,7 +59,7 @@ namespace GnuCash.Sql2Qif.Library.DAL
                             t.post_date asc
             ";
 
-        public IEnumerable<ITransaction> Extract (string dataSource, IEnumerable<IAccount> accounts)
+        public IEnumerable<ITransaction> Extract(string dataSource, IEnumerable<IAccount> accounts)
         {
             var connectionString = string.Format("DataSource={0}", dataSource);
             var transactions = new List<ITransaction>();
@@ -68,35 +72,48 @@ namespace GnuCash.Sql2Qif.Library.DAL
                 {
                     while (reader.Read())
                     {
-                        var trx = new Transaction
-                        {
-                            TransactionGuid = reader["guid"].ToString()
-                        };
-                        var isExistingTrx = false;
+                        var trx = AddTransaction(reader["TrxGuid"].ToString(), transactions);
 
-                        // Check for existing transaction in list - use if it exists
-                        var trxLookup = transactions.Where<ITransaction>(t => t.TransactionGuid == trx.TransactionGuid).FirstOrDefault<ITransaction>(); // should only be one trx entry
 
-                        if (trxLookup != null)
-                        {
-                            // transaction already on the list, so use the exisitng reference and enrich it
-                            trx = (Transaction) trxLookup;
-                            isExistingTrx = true;
-                        }
+                        // Lookup the accounts or Categories and add reference to transaction list
+                        var accountGuid = reader["AccGuid"]?.ToString();
+                        var categoryGuid = reader["CategoryGuid"]?.ToString();
+                        var transfer = reader["Transfer"].ToString(); // transfer could be a category name or account name
 
-                        // Lookup the account and add transaction to the account's list
-
-                        // Lookup the category and add to the transaction
-
-                        if (!isExistingTrx)
-                        {
-                            transactions.Add(trx);
-                        }
+                        trx.DatePosted = DateTime.ParseExact(reader["DatePosted"].ToString(), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                        //TODO: ChequeNumber from Num, but may not be a number, could be Withd, POS, ATM. What to do?
+                        trx.Description = reader["Description"].ToString();
+                        trx.Memo = reader["Notes"].ToString();
+                        trx.Reconciled = reader["isReconciled"].ToString();
+                        //TODO: Value may be - or + depedning on whether it's for the account or category(ies) - we only want the account value for now
                     }
                 }
             }
 
             return transactions;
+        }
+
+        private Transaction AddTransaction(string trxGuid, List<ITransaction> transactions)
+        {
+            var trx = new Transaction
+            {
+                TransactionGuid = trxGuid
+            };
+
+            var trxLookup = transactions.Where<ITransaction>(t => t.TransactionGuid == trxGuid).FirstOrDefault<ITransaction>(); // should only be one trx entry
+
+            if (trxLookup != null)
+            {
+                // transaction already on the list, so use the exisitng reference
+                trx = (Transaction)trxLookup;
+            }
+            else
+            {
+                // new transaction, so add it to the transaction list
+                transactions.Add(trx);
+            }
+
+            return trx;
         }
 
     }
