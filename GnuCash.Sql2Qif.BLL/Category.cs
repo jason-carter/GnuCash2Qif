@@ -12,7 +12,7 @@ namespace GnuCash.Sql2Qif.Library.BLL
         public string AccountType { get; set; }
         public string Hierarchy { get; set; }
         public int HierarchyLevel { get; set; }
-        public IEnumerable<ITransaction> Transactions { get; set; }
+        public List<ITransaction> Transactions { get; set; }
 
         public string QifOutput()
         {

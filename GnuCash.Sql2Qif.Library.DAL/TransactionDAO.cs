@@ -74,18 +74,28 @@ namespace GnuCash.Sql2Qif.Library.DAL
                     {
                         var trx = AddTransaction(reader["TrxGuid"].ToString(), transactions);
 
-
-                        // Lookup the accounts or Categories and add reference to transaction list
+                        // Lookup the accounts or Categories and add object references
                         var accountGuid = reader["AccGuid"]?.ToString();
                         var categoryGuid = reader["CategoryGuid"]?.ToString();
-                        var transfer = reader["Transfer"].ToString(); // transfer could be a category name or account name
 
-                        trx.DatePosted = DateTime.ParseExact(reader["DatePosted"].ToString(), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                        //TODO: ChequeNumber from Num, but may not be a number, could be Withd, POS, ATM. What to do?
+                        AddTransactionToAccount(accountGuid, trx, accounts);
+                        AddCategoryToTransaction(categoryGuid, trx, accounts);
+
+                        var transfer = reader["Transfer"].ToString(); // TODO: This is the category name, do we need this if we've looked up the object?
+                        
+                        trx.DatePosted = Convert.ToDateTime(reader["DatePosted"].ToString());
+                        trx.Number = reader["Num"].ToString(); //TODO: This may not be a number, could be Withd, POS, ATM - do we want those?
                         trx.Description = reader["Description"].ToString();
                         trx.Memo = reader["Notes"].ToString();
                         trx.Reconciled = reader["isReconciled"].ToString();
-                        //TODO: Value may be - or + depedning on whether it's for the account or category(ies) - we only want the account value for now
+
+                        if (!accountGuid.Equals(string.Empty) && categoryGuid.Equals(string.Empty))
+                        {
+                            // Only using the value against the account entry so the sign is correct for the account.
+                            // If we ever extend this beyond the QIF format it will need to store the value for the
+                            // category as well, and so keep both (or more) double entry values
+                            trx.Value = Convert.ToDecimal(reader["trxValue"].ToString());
+                        }
                     }
                 }
             }
@@ -116,5 +126,42 @@ namespace GnuCash.Sql2Qif.Library.DAL
             return trx;
         }
 
+        private void AddTransactionToAccount(string accountGuid, Transaction trx, IEnumerable<IAccount> accounts)
+        {
+            if (accountGuid.Equals(string.Empty))
+            {
+                return;
+            }
+
+            var account = accounts.Where<IAccount>(a => a.Guid == accountGuid).FirstOrDefault<IAccount>();
+
+            if (account != null)
+            {
+                account.Transactions.Add(trx);
+            }
+            else
+            {
+                //TODO: Report WARNING Unknown account on transaction {Guid}
+            }
+        }
+
+        private void AddCategoryToTransaction(string categoryGuid, Transaction trx, IEnumerable<IAccount> categories)
+        {
+            if (categoryGuid.Equals(string.Empty))
+            {
+                return;
+            }
+
+            var category = categories.Where<IAccount>(c => c.Guid == categoryGuid).FirstOrDefault<IAccount>();
+
+            if (category != null)
+            {
+                trx.Categories.Add(category);
+            }
+            else
+            {
+                //TODO: Report WARNING Unknown Category on transaction {Guid}
+            }
+        }
     }
 }
