@@ -5,7 +5,7 @@ This is still a WIP and not yet ready for general use. Major refactors are happe
 
 ## To Do
 
- - Extract and ouput transactions
+ - ~~Extract and~~ Output transaction functionality
  - Output to a file (currently outputs to System Out)
  - Add warnings/errors to the output (pass back to gui layer via event)
  - Add the CLI Options project properly (then can improve this Readme.md with better usage instructions
@@ -14,5 +14,5 @@ This is still a WIP and not yet ready for general use. Major refactors are happe
  
 ## Longer-term To Do
 
- - Add journal as an output format (https://hledger.org/journal.html)
+ - Add [journal](https://hledger.org/journal.html) as an output format
  - Rewrite in functional language (Haskell or Erlang, probably not F# as want to try something not from MS)
