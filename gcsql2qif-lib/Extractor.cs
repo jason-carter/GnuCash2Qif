@@ -9,8 +9,22 @@ namespace GnuCash.Sql2Qif.Library
 {
     public class Extractor
     {
+        public event EventHandler<LogEventArgs> LogEvent;
+
+        protected void OnLogEvent(string level, string logMessage)
+        {
+            LogEventArgs args = new LogEventArgs()
+            {
+                LogLevel = level,
+                LogMessage = logMessage
+            };
+            LogEvent?.Invoke(this, args);
+        }
+
         public void ExtractData(string dataSource, string outputFileName)
         {
+            OnLogEvent("INFO", "Running...");
+
             var accDAO = new AccountDAO();
             List<IAccount> accounts = accDAO.Extract(dataSource).ToList<IAccount>();
 
@@ -31,6 +45,5 @@ namespace GnuCash.Sql2Qif.Library
 
             // Output the Transactions
         }
-
     }
 }

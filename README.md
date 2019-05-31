@@ -7,9 +7,9 @@ This is still a WIP and not yet ready for general use. Major refactors are happe
 
  - ~~Extract and~~ Output transaction functionality
  - Output to a file (currently outputs to System Out)
- - Add warnings/errors to the output (pass back to gui layer via event)
+ - ~~Add warnings/errors to the output (pass back to gui layer via event)~~
  - ~~Add the CLI Options project properly~~
- - Improve this Readme.md with better usage instructions
+ - Change this Readme.md with usage instructions
  - Add a mapping function for categories? Not sure about this
  - Consider a WPF UI (now that MS are supporting it going forward)
  - Add Unity / DI and Unit Tests (would normally have done this first if it wasn't experimental)
