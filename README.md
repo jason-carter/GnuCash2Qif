@@ -13,7 +13,8 @@ This is still a WIP and not yet ready for general use. Major refactors are happe
  - Consider a WPF UI (now that MS are supporting it going forward)
  - Add Unity / DI and Unit Tests (would normally have done this first if it wasn't experimental)
  
-## Longer-term To Do
+## Longer-term Possibilities
+These posibilities simply interest me so might explore them later once this project is mature enough.
 
  - Add [journal](https://hledger.org/journal.html) as an output format, and explore [Plain Text Accounting](https://plaintextaccounting.org/)
  - Rewrite in functional language (Haskell or Erlang, probably not F# as want to try something not from MS)
