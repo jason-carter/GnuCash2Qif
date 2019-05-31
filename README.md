@@ -16,5 +16,6 @@ This is still a WIP and not yet ready for general use. Major refactors are happe
 ## Longer-term Possibilities
 These ideas interest me so I might explore them later once this project is mature enough.
 
+ - Is it possible to do this in pure SQL? Was nearly there at the start of this project but merging the double entries proved difficult.
  - Add [journal](https://hledger.org/journal.html) as an output format, and explore [Plain Text Accounting](https://plaintextaccounting.org/)
  - Rewrite in functional language (Haskell or Erlang, probably not F# as want to try something not from MS)
