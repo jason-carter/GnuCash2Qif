@@ -14,7 +14,7 @@ namespace GnuCash.Sql2Qif.Library.BLL
         public int HierarchyLevel { get; set; }
         public List<ITransaction> Transactions { get; set; }
 
-        public string QifOutput()
+        public string QifAccountOutput()
         {
             var nl = Environment.NewLine;
             var qif = $"N{Name}{nl}";

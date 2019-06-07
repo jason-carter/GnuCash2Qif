@@ -19,7 +19,7 @@ namespace GnuCash.Sql2Qif.Library.BLL
         public int HierarchyLevel { get; set; }
         public List<ITransaction> Transactions { get; set; }
 
-        public string QifOutput()
+        public string QifAccountOutput()
         {
             var qif = $"N{Name}{Environment.NewLine}";
             qif += $"T{QifAccountType()}{Environment.NewLine}";
@@ -29,7 +29,15 @@ namespace GnuCash.Sql2Qif.Library.BLL
             return qif;
         }
 
-        public string QifAccountTransactionHeaderOutput()
+        public string QifAccountTransactionOutput()
+        {
+            var qif = QifAccountTransactionHeaderOutput();
+            Transactions.ForEach(t => qif += t.QifOutput()); //TODO: this won't scale very well
+
+            return qif;
+        }
+
+        private string QifAccountTransactionHeaderOutput()
         {
             var qif = $"!Account{Environment.NewLine}";
             qif += $"N{Name}{Environment.NewLine}";

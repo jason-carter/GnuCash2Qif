@@ -7,7 +7,7 @@ namespace GnuCash.Sql2Qif.Library.BLL
     {
         string TransactionGuid { get; set; }
         DateTime DatePosted { get; set; }
-        string Number { get; set; }
+        string Ref { get; set; }
         string Description { get; set; }
         string Memo { get; set; }
         List<IAccount> Categories { get; set; }

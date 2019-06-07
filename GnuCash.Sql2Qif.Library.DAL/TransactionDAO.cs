@@ -40,7 +40,7 @@ namespace GnuCash.Sql2Qif.Library.DAL
                             acc.guid            as AccGuid,
                             acc.name            as AccountName,
                             t.post_date         as DatePosted,
-                            t.Num,
+                            t.Num               as Ref,
                             t.Description,
                             sl.string_val       as Notes,
                             cat.guid            as CategoryGuid,
@@ -84,7 +84,7 @@ namespace GnuCash.Sql2Qif.Library.DAL
                         var transfer = reader["Transfer"].ToString(); // TODO: This is the category name, do we need this if we've looked up the object?
                         
                         trx.DatePosted = Convert.ToDateTime(reader["DatePosted"].ToString());
-                        trx.Number = reader["Num"].ToString(); //TODO: This may not be a number, could be Withd, POS, ATM - do we want those?
+                        trx.Ref = reader["Ref"].ToString();
                         trx.Description = reader["Description"].ToString();
                         trx.Memo = reader["Notes"].ToString();
                         trx.Reconciled = reader["isReconciled"].ToString();

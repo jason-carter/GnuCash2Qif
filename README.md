@@ -5,7 +5,7 @@ This is still a WIP and not yet ready for general use. Major refactors are happe
 
 ## To Do
 
- - ~~Extract and~~ Output transaction functionality
+ - ~~Extract and Output transaction functionality~~
  - Output to a file (currently outputs to System Out) : Probably need to move the QIF output functions from the BLL objects to an output format object to allow for larger resultsets being returned
  - ~~Add warnings/errors to the output (pass back to gui layer via event)~~
  - ~~Add the CLI Options project properly~~
