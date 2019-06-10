@@ -12,8 +12,10 @@ namespace GnuCashSql2Qif
             Parser.Default.ParseArguments<CommandLineOptions>(args)
                 .WithParsed(a =>
                     {
-                        // TODO: check the datasource files exists? Or let the library do that? Or both?
-                        // TODO: check the output file doesn't exist, confirm overwrite if it does? Library will assume overwrite
+                        // TODO: check the datasource files exists
+                        // TODO: check if the dataource is a valid GnuCash Sqlite file
+
+                        // TODO: check the output file doesn't exist, confirm overwrite if it does
 
                         var runExtract = new Extractor();
                         runExtract.LogEvent += HandleLogEvent;

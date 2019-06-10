@@ -13,7 +13,5 @@ namespace GnuCash.Sql2Qif.Library.BLL
         List<IAccount> Categories { get; set; }
         string Reconciled { get; set; }
         decimal Value { get; set; }
-
-        string QifOutput();
     }
 }

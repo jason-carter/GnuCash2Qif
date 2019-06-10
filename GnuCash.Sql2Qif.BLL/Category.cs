@@ -13,22 +13,5 @@ namespace GnuCash.Sql2Qif.Library.BLL
         public string Hierarchy { get; set; }
         public int HierarchyLevel { get; set; }
         public List<ITransaction> Transactions { get; set; }
-
-        public string QifAccountOutput()
-        {
-            var nl = Environment.NewLine;
-            var qif = $"N{Name}{nl}";
-            qif += $"D{Description}{nl}";
-            qif += $"{QifAccountType()}{nl}";
-            qif += $"^{Environment.NewLine}";
-            return qif;
-        }
-
-        private string QifAccountType()
-        {
-            return AccountType == "INCOME" ? "I" : 
-                   AccountType == "EXPENSE" ? "E" : 
-                   "?";
-        }
     }
 }

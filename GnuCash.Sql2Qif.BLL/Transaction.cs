@@ -20,26 +20,5 @@ namespace GnuCash.Sql2Qif.Library.BLL
         public List<IAccount> Categories { get; set; }
         public string Reconciled { get; set; }
         public decimal Value { get; set; }
-
-        public string QifOutput()
-        {
-            var qif = $"D{DatePosted.ToString("MM/d/yyyy")}{Environment.NewLine}"; // TODO: Check QIF's supported date formats
-            qif += $"U{Value}{Environment.NewLine}";
-            qif += $"T{Value}{Environment.NewLine}";
-            qif += $"P{Memo}{Environment.NewLine}";
-            if (Reconciled.ToLower().Equals("y") || 
-                Reconciled.ToLower().Equals("c"))
-            {
-                // Reconciled or Cleared
-                qif += $"C*{Environment.NewLine}";
-            }
-            if (Categories.Count<IAccount>() > 0)
-            {
-                qif += $"L{(Categories.FirstOrDefault<IAccount>()).Name}{Environment.NewLine}";
-            }
-            qif += $"^{Environment.NewLine}";
-
-            return qif;
-        }
     }
 }

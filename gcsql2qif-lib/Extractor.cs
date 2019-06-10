@@ -30,29 +30,9 @@ namespace GnuCash.Sql2Qif.Library
 
             OnLogEvent("INFO", "Extracting transactions...");
             List<ITransaction> transactions = (new TransactionDAO()).Extract(dataSource, accounts).ToList<ITransaction>();
-
             // TODO: Log some useful information like number of transactions, number of transactions per account
 
-            OutputQifData(accounts, outputFileName);
-        }
-
-        private void OutputQifData(List<IAccount> accounts, string outputFileName)
-        {
-            // Category section (expense / income accounts)
-            Console.WriteLine("!Type:Cat");
-            accounts.FindAll(n => n.AccountType == "EXPENSE" || n.AccountType == "INCOME")
-                .ToList().ForEach(n => Console.Write(n.QifAccountOutput()));
-
-            Console.WriteLine("!Option:AutoSwitch"); // TODO: Check what this does6
-
-            // Account section (asset / credit / bank accounts
-            Console.WriteLine("!Account"); // Start or Account Section
-            accounts.FindAll(n => n.AccountType == "ASSET" || n.AccountType == "CREDIT" || n.AccountType == "BANK")
-                .ToList().ForEach(n => Console.Write(n.QifAccountOutput()));
-
-            // Transaction section by account
-            accounts.FindAll(n => n.AccountType == "ASSET" || n.AccountType == "CREDIT" || n.AccountType == "BANK")
-                .ToList().ForEach(n => Console.Write(((Account) n).QifAccountTransactionOutput()));
+            (new QifCashOutputter()).Write(accounts, outputFileName);
         }
     }
 }

@@ -18,42 +18,5 @@ namespace GnuCash.Sql2Qif.Library.BLL
         public string Hierarchy { get; set; }
         public int HierarchyLevel { get; set; }
         public List<ITransaction> Transactions { get; set; }
-
-        public string QifAccountOutput()
-        {
-            var qif = $"N{Name}{Environment.NewLine}";
-            qif += $"T{QifAccountType()}{Environment.NewLine}";
-            qif += $"D{Description}{Environment.NewLine}";
-            qif += $"^{Environment.NewLine}";
-
-            return qif;
-        }
-
-        public string QifAccountTransactionOutput()
-        {
-            var qif = QifAccountTransactionHeaderOutput();
-            Transactions.ForEach(t => qif += t.QifOutput()); //TODO: this won't scale very well
-
-            return qif;
-        }
-
-        private string QifAccountTransactionHeaderOutput()
-        {
-            var qif = $"!Account{Environment.NewLine}";
-            qif += $"N{Name}{Environment.NewLine}";
-            qif += $"T{QifAccountType()}{Environment.NewLine}";
-            qif += $"^{Environment.NewLine}";
-            qif += $"!Type:{QifAccountType()}{Environment.NewLine}";
-
-            return qif;
-        }
-
-        private string QifAccountType()
-        {
-            return  AccountType == "BANK" ? "Bank" : 
-                    AccountType == "CREDIT" ? "CCard" : 
-                    AccountType == "ASSET" ? "Oth A" : 
-                    "?";
-        }
     }
 }
