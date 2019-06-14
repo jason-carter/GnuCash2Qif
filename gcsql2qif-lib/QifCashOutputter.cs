@@ -19,34 +19,33 @@ namespace GnuCash.Sql2Qif.Library
 
         public void Write(List<IAccount> accounts, StreamWriter outputFile)
         {
-
             // Category section (expense / income accounts)
             outputFile.WriteLine("!Type:Cat");
-            accounts.FindAll(n => n.AccountType == "EXPENSE" || n.AccountType == "INCOME")
+            accounts.FindAll(n => IsCategory(n.AccountType))
                 .ToList().ForEach(n => QifCategoryOutput(n, outputFile));
 
             outputFile.WriteLine("!Option:AutoSwitch"); // TODO: Check what this does6
 
-            // Account section (asset / credit / bank accounts
+            // Account section (asset / credit / bank / liability accounts)
             outputFile.WriteLine("!Account");
-            accounts.FindAll(n => n.AccountType == "ASSET" || n.AccountType == "CREDIT" || n.AccountType == "BANK")
+            accounts.FindAll(n => IsAccount(n.AccountType))
                 .ToList().ForEach(n => QifAccountOutput(n, outputFile));
 
             outputFile.WriteLine("!Clear:AutoSwitch");  // TODO: Check what this does6
             outputFile.WriteLine("!Option:AutoSwitch"); // TODO: Check what this does6
 
             // Transaction section by account
-            accounts.FindAll(n => n.AccountType == "ASSET" || n.AccountType == "CREDIT" || n.AccountType == "BANK")
+            accounts.FindAll(n => IsAccount(n.AccountType))
                 .ToList().ForEach(n => QifAccountTransactionOutput(n, outputFile));
         }
 
-        public void QifAccountTransactionOutput(IAccount acc, StreamWriter output)
+        private void QifAccountTransactionOutput(IAccount acc, StreamWriter output)
         {
             QifAccountTransactionHeaderOutput(acc, output);
             acc.Transactions.ForEach(t => QifTransactionOutput(t, output));
         }
 
-        public void QifTransactionOutput(ITransaction trx, StreamWriter output)
+        private void QifTransactionOutput(ITransaction trx, StreamWriter output)
         {
             output.WriteLine($"D{trx.DatePosted.ToString("MM/d/yyyy")}"); // TODO: Check QIF's supported date formats
             output.WriteLine($"U{trx.Value}");
@@ -60,6 +59,8 @@ namespace GnuCash.Sql2Qif.Library
             }
             if (trx.Categories.Count<IAccount>() > 0)
             {
+                //TODO: Category or account transfer
+                // Account name is enclosed in square brackets
                 output.WriteLine($"L{(trx.Categories.FirstOrDefault<IAccount>()).Name}");
             }
             output.WriteLine($"^");
@@ -82,12 +83,26 @@ namespace GnuCash.Sql2Qif.Library
             output.WriteLine($"^");
         }
 
-        public void QifCategoryOutput(IAccount cat, StreamWriter output)
+        private void QifCategoryOutput(IAccount cat, StreamWriter output)
         {
             output.WriteLine($"N{cat.Name}");
             output.WriteLine($"D{cat.Description}");
             output.WriteLine($"{QifCategoryType(cat.AccountType)}");
             output.WriteLine($"^");
+        }
+
+        private bool IsCategory(string catType)
+        {
+            return (catType == "EXPENSE" || 
+                    catType == "INCOME") ? true : false;
+        }
+
+        private bool IsAccount(string catType)
+        {
+            return (catType == "ASSET" ||
+                    catType == "CREDIT" ||
+                    catType == "BANK" ||
+                    catType == "LIABILITY") ? true : false;
         }
 
         private string QifCategoryType(string catType)
@@ -102,6 +117,7 @@ namespace GnuCash.Sql2Qif.Library
             return accType == "BANK" ? "Bank" :
                     accType == "CREDIT" ? "CCard" :
                     accType == "ASSET" ? "Oth A" :
+                    accType == "LIABILITY" ? "Oth L" :
                     "?";
         }
     }
