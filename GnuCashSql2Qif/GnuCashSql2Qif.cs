@@ -24,12 +24,13 @@ namespace GnuCashSql2Qif
 
                         WriteLog("INFO", "GnuCashSql2Qif successfully completed.");
                         Environment.Exit(0);
-                    })
-                    .WithNotParsed(a =>
-                    {
-                        WriteLog("ERROR", "Exiting GnuCashSql2Qif because the arguments could not be parsed.");
-                        Environment.Exit(-2);
                     });
+                    // Cleaner output without the error message
+                    //.WithNotParsed(a =>
+                    //{
+                    //    //WriteLog("ERROR", "Exiting GnuCashSql2Qif because the arguments could not be parsed.");
+                    //    //Environment.Exit(-2);
+                    //});
             }
             catch (Exception ex)
             {
