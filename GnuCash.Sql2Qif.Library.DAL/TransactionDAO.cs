@@ -33,7 +33,7 @@ namespace GnuCash.Sql2Qif.Library.DAL
                                           and p.parent_guid is null
                                           and p.account_type = 'ROOT'
                                           and p.name = 'Root Account'
-                where acc.account_type in ('ASSET', 'CREDIT', 'BANK')
+                where acc.account_type in ('ASSET', 'CREDIT', 'BANK', 'LIABILITY')
             )
             select
                             t.guid              as TrxGuid,

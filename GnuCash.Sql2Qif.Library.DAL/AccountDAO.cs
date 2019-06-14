@@ -30,7 +30,7 @@ namespace GnuCash.Sql2Qif.Library.DAL
                     substr(path, 2, length(path)) 'path',
                     account_type, level
             from    cteAccounts
-            where account_type in ('ASSET', 'CREDIT', 'BANK', 'EXPENSE', 'INCOME')
+            where account_type in ('ASSET', 'CREDIT', 'BANK', 'EXPENSE', 'INCOME', 'LIABILITY')
             ";
 
         public IEnumerable<IAccount> Extract(string dataSource)
