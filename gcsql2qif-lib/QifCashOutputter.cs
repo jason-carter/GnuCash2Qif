@@ -39,15 +39,14 @@ namespace GnuCash.Sql2Qif.Library
 
         private void QifTransactionOutput(IAccount parentAcc, ITransaction trx, StreamWriter output)
         {
-            decimal trxValue = 0;
+            // Use the transaction value of the parent account
+            var trxValue = trx.AccountSplits.Where(ac => IsAccount(ac.Account.AccountType) && ac.Account.Guid == parentAcc.Guid).FirstOrDefault().Trxvalue;
             var accountRef = "";
             var memo = "";
 
             if (trx.AccountSplits.Where(ac => IsCategory(ac.Account.AccountType)).Count<IAccountSplit>() > 0)
             {
                 // Has one or more categories
-                //TODO: sums up all category values and uses the first found category. Bit of a cheat but tricy otherwise
-                trxValue = trx.AccountSplits.Where(ac => IsCategory(ac.Account.AccountType)).Sum(x => x.Trxvalue);
                 accountRef += $"{trx.AccountSplits.Where(ac => IsCategory(ac.Account.AccountType)).FirstOrDefault().Account.Name}";
                 memo = trx.Memo;
             }
@@ -55,7 +54,6 @@ namespace GnuCash.Sql2Qif.Library
             {
                 // Has more than one account so is an account transfer
                 //TODO: Check if there could be multiple account transfers in a split - tricky
-                trxValue = trx.AccountSplits.Where(ac => IsAccount(ac.Account.AccountType) && ac.Account.Guid == parentAcc.Guid).FirstOrDefault().Trxvalue;
                 accountRef += $"[{trx.AccountSplits.Where(ac => IsAccount(ac.Account.AccountType) && ac.Account.Guid != parentAcc.Guid).FirstOrDefault().Account.Name}]";
                 memo = trx.Description;
             }
