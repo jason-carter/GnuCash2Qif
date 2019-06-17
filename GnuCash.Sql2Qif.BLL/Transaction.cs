@@ -7,7 +7,8 @@ namespace GnuCash.Sql2Qif.Library.BLL
     {
         public Transaction()
         {
-            Categories = new List<IAccount>();
+            AccountSplits = new List<IAccountSplit>();
+            ParentAccounts = new List<IAccount>();
         }
 
         public string TransactionGuid { get; set; }
@@ -15,8 +16,9 @@ namespace GnuCash.Sql2Qif.Library.BLL
         public string Ref { get; set; }
         public string Description { get; set; }
         public string Memo { get; set; }
-        public List<IAccount> Categories { get; set; }
         public string Reconciled { get; set; }
         public decimal Value { get; set; }
+        public List<IAccountSplit> AccountSplits { get; set; }
+        public List<IAccount> ParentAccounts { get; set; }
     }
 }

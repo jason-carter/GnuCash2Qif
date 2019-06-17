@@ -77,9 +77,10 @@ namespace GnuCash.Sql2Qif.Library.DAL
                         // Lookup the accounts or Categories and add object references
                         var accountGuid = reader["AccGuid"]?.ToString();
                         var categoryGuid = reader["CategoryGuid"]?.ToString();
+                        var trxValue = Convert.ToDecimal(reader["trxValue"].ToString());
 
-                        AddTransactionToAccount(accountGuid, trx, accounts);
-                        AddCategoryToTransaction(categoryGuid, trx, accounts);
+                        AddAccountSplit(accountGuid, trx, accounts, trxValue);
+                        AddAccountSplit(categoryGuid, trx, accounts, trxValue);
 
                         var transfer = reader["Transfer"].ToString(); // TODO: This is the category name, do we need this if we've looked up the object?
                         
@@ -88,14 +89,6 @@ namespace GnuCash.Sql2Qif.Library.DAL
                         trx.Description = reader["Description"].ToString();
                         trx.Memo = reader["Notes"].ToString();
                         trx.Reconciled = reader["isReconciled"].ToString();
-
-                        if (!accountGuid.Equals(string.Empty) && categoryGuid.Equals(string.Empty))
-                        {
-                            // Only using the value against the account entry so the sign is correct for the account.
-                            // If we ever extend this beyond the QIF format it will need to store the value for the
-                            // category as well, and so keep both (or more) double entry values
-                            trx.Value = Convert.ToDecimal(reader["trxValue"].ToString());
-                        }
                     }
                 }
             }
@@ -105,20 +98,15 @@ namespace GnuCash.Sql2Qif.Library.DAL
 
         private Transaction AddTransaction(string trxGuid, List<ITransaction> transactions)
         {
-            var trx = new Transaction
-            {
-                TransactionGuid = trxGuid
-            };
+            var trx = (Transaction) transactions.Where<ITransaction>(t => t.TransactionGuid == trxGuid).FirstOrDefault<ITransaction>(); // should only be one trx entry
 
-            var trxLookup = transactions.Where<ITransaction>(t => t.TransactionGuid == trxGuid).FirstOrDefault<ITransaction>(); // should only be one trx entry
+            if (trx == null)
+            {
+                trx = new Transaction
+                {
+                    TransactionGuid = trxGuid
+                };
 
-            if (trxLookup != null)
-            {
-                // transaction already on the list, so use the exisitng reference
-                trx = (Transaction)trxLookup;
-            }
-            else
-            {
                 // new transaction, so add it to the transaction list
                 transactions.Add(trx);
             }
@@ -126,42 +114,37 @@ namespace GnuCash.Sql2Qif.Library.DAL
             return trx;
         }
 
-        private void AddTransactionToAccount(string accountGuid, Transaction trx, IEnumerable<IAccount> accounts)
+        private void AddAccountSplit(string accountGuid, Transaction trx, IEnumerable<IAccount> accounts, decimal trxValue)
         {
             if (accountGuid.Equals(string.Empty))
             {
                 return;
             }
 
+            // Transactions belong to one or more accounts, and may represent a transfer between
+            // accounts, in which case it will have two account references
+
             var account = accounts.Where<IAccount>(a => a.Guid == accountGuid).FirstOrDefault<IAccount>();
 
-            if (account != null)
-            {
-                account.Transactions.Add(trx);
-            }
-            else
+            if (account == null)
             {
                 //TODO: Report WARNING Unknown account on transaction {Guid}
-            }
-        }
-
-        private void AddCategoryToTransaction(string categoryGuid, Transaction trx, IEnumerable<IAccount> categories)
-        {
-            if (categoryGuid.Equals(string.Empty))
-            {
                 return;
             }
 
-            var category = categories.Where<IAccount>(c => c.Guid == categoryGuid).FirstOrDefault<IAccount>();
+            // Wrap the account up into a split to represent double entry accounting
+            IAccountSplit accSplit = new AccountSplit()
+            {
+                Account = account,
+                Trxvalue = trxValue
+            };
 
-            if (category != null)
+            if (!account.AccountType.ToLower().Equals("income") && !account.AccountType.ToLower().Equals("expense"))
             {
-                trx.Categories.Add(category);
+                account.Transactions.Add(trx);      // Transaction is added to the parent account...
+                trx.ParentAccounts.Add(account);    // ... and is added to parent account reference of the transaction
             }
-            else
-            {
-                //TODO: Report WARNING Unknown Category on transaction {Guid}
-            }
+            trx.AccountSplits.Add(accSplit);      // The account split is added to the transaction reference
         }
     }
 }

@@ -10,8 +10,8 @@ namespace GnuCash.Sql2Qif.Library.BLL
         string Ref { get; set; }
         string Description { get; set; }
         string Memo { get; set; }
-        List<IAccount> Categories { get; set; }
+        List<IAccountSplit> AccountSplits { get; set; }
+        List<IAccount> ParentAccounts { get; set; }
         string Reconciled { get; set; }
-        decimal Value { get; set; }
     }
 }
