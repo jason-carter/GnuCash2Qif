@@ -12,6 +12,5 @@ namespace GnuCash.Sql2Qif.Library.BLL
         string Memo { get; set; }
         List<IAccountSplit> AccountSplits { get; set; }
         List<IAccount> ParentAccounts { get; set; }
-        string Reconciled { get; set; }
     }
 }

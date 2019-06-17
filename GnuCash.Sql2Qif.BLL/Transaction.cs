@@ -16,7 +16,6 @@ namespace GnuCash.Sql2Qif.Library.BLL
         public string Ref { get; set; }
         public string Description { get; set; }
         public string Memo { get; set; }
-        public string Reconciled { get; set; }
         public decimal Value { get; set; }
         public List<IAccountSplit> AccountSplits { get; set; }
         public List<IAccount> ParentAccounts { get; set; }

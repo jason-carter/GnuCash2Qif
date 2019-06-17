@@ -78,8 +78,9 @@ namespace GnuCash.Sql2Qif.Library.DAL
                         var accountGuid = reader["AccGuid"]?.ToString();
                         var categoryGuid = reader["CategoryGuid"]?.ToString();
                         var trxValue = Convert.ToDecimal(reader["trxValue"].ToString());
+                        var isReconciled = reader["isReconciled"].ToString();
 
-                        AddAccountSplit(accountGuid, trx, accounts, trxValue);
+                        AddAccountSplit(accountGuid, trx, accounts, trxValue, isReconciled);
                         AddAccountSplit(categoryGuid, trx, accounts, trxValue);
 
                         var transfer = reader["Transfer"].ToString(); // TODO: This is the category name, do we need this if we've looked up the object?
@@ -88,7 +89,6 @@ namespace GnuCash.Sql2Qif.Library.DAL
                         trx.Ref = reader["Ref"].ToString();
                         trx.Description = reader["Description"].ToString();
                         trx.Memo = reader["Notes"].ToString();
-                        trx.Reconciled = reader["isReconciled"].ToString();
                     }
                 }
             }
@@ -114,7 +114,7 @@ namespace GnuCash.Sql2Qif.Library.DAL
             return trx;
         }
 
-        private void AddAccountSplit(string accountGuid, Transaction trx, IEnumerable<IAccount> accounts, decimal trxValue)
+        private void AddAccountSplit(string accountGuid, Transaction trx, IEnumerable<IAccount> accounts, decimal trxValue, string isReconciled = "n")
         {
             if (accountGuid.Equals(string.Empty))
             {
@@ -136,15 +136,22 @@ namespace GnuCash.Sql2Qif.Library.DAL
             IAccountSplit accSplit = new AccountSplit()
             {
                 Account = account,
+                Reconciled = isReconciled,
                 Trxvalue = trxValue
             };
 
-            if (!account.AccountType.ToLower().Equals("income") && !account.AccountType.ToLower().Equals("expense"))
+            if (!IsCategory(account.AccountType))
             {
                 account.Transactions.Add(trx);      // Transaction is added to the parent account...
                 trx.ParentAccounts.Add(account);    // ... and is added to parent account reference of the transaction
             }
             trx.AccountSplits.Add(accSplit);      // The account split is added to the transaction reference
+        }
+
+         private bool IsCategory(string catType)
+        {
+            return (catType == "EXPENSE" ||
+                    catType == "INCOME") ? true : false;
         }
     }
 }

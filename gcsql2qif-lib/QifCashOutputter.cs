@@ -40,12 +40,15 @@ namespace GnuCash.Sql2Qif.Library
         private void QifTransactionOutput(IAccount parentAcc, ITransaction trx, StreamWriter output)
         {
             // Use the transaction value of the parent account
-            var trxValue = trx.AccountSplits.Where(ac => IsAccount(ac.Account.AccountType) && ac.Account.Guid == parentAcc.Guid).FirstOrDefault().Trxvalue;
+            var mainParentAccount = trx.AccountSplits.Where(ac => IsAccount(ac.Account.AccountType) && ac.Account.Guid == parentAcc.Guid).FirstOrDefault();
+            var trxValue = mainParentAccount.Trxvalue;
+            var isReconciled = IsReconciled(mainParentAccount.Reconciled);
             var accountRef = "";
 
             if (trx.AccountSplits.Where(ac => IsCategory(ac.Account.AccountType)).Count<IAccountSplit>() > 0)
             {
-                // Has one or more categories
+                // Has one or more category accounts
+                // TODO: Consider supporting multiple splits, for now just grab the first one
                 accountRef += $"{trx.AccountSplits.Where(ac => IsCategory(ac.Account.AccountType)).FirstOrDefault().Account.Name}";
             }
             else if (trx.AccountSplits.Where(ac => IsAccount(ac.Account.AccountType)).Count<IAccountSplit>() > 1)
@@ -64,11 +67,8 @@ namespace GnuCash.Sql2Qif.Library
             output.WriteLine($"T{trxValue}");
             output.WriteLine($"P{trx.Description}");
             output.WriteLine($"M{trx.Memo}");
-
-            if (trx.Reconciled.ToLower().Equals("y") ||
-                trx.Reconciled.ToLower().Equals("c"))
+            if (isReconciled)
             {
-                // Reconciled or Cleared
                 output.WriteLine($"C*");
             }
             output.WriteLine($"L{accountRef}");
@@ -119,6 +119,13 @@ namespace GnuCash.Sql2Qif.Library
             output.WriteLine($"D{cat.Description}");
             output.WriteLine($"{QifCategoryType(cat.AccountType)}");
             output.WriteLine($"^");
+        }
+
+        private bool IsReconciled(string isReconciled)
+        {
+            // Assuming 'cleared' accounts are reconciled
+            return (isReconciled.ToLower().Equals("y") ||
+                    isReconciled.ToLower().Equals("c"));
         }
 
         private bool IsCategory(string catType)
