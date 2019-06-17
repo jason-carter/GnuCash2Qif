@@ -63,6 +63,10 @@ namespace GnuCash.Sql2Qif.Library
             }
 
             output.WriteLine($"D{trx.DatePosted.ToString("MM/d/yyyy")}"); // TODO: Check QIF's supported date formats
+            if (trx.Ref != null && !trx.Ref.Equals(string.Empty))
+            {
+                output.WriteLine($"N{trx.Ref}");
+            }
             output.WriteLine($"U{trxValue}");
             output.WriteLine($"T{trxValue}");
             output.WriteLine($"P{trx.Description}");

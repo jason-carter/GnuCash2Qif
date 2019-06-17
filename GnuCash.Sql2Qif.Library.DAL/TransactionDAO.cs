@@ -83,8 +83,6 @@ namespace GnuCash.Sql2Qif.Library.DAL
                         AddAccountSplit(accountGuid, trx, accounts, trxValue, isReconciled);
                         AddAccountSplit(categoryGuid, trx, accounts, trxValue);
 
-                        var transfer = reader["Transfer"].ToString(); // TODO: This is the category name, do we need this if we've looked up the object?
-                        
                         trx.DatePosted = Convert.ToDateTime(reader["DatePosted"].ToString());
                         trx.Ref = reader["Ref"].ToString();
                         trx.Description = reader["Description"].ToString();
