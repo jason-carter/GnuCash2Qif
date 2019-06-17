@@ -42,20 +42,17 @@ namespace GnuCash.Sql2Qif.Library
             // Use the transaction value of the parent account
             var trxValue = trx.AccountSplits.Where(ac => IsAccount(ac.Account.AccountType) && ac.Account.Guid == parentAcc.Guid).FirstOrDefault().Trxvalue;
             var accountRef = "";
-            var memo = "";
 
             if (trx.AccountSplits.Where(ac => IsCategory(ac.Account.AccountType)).Count<IAccountSplit>() > 0)
             {
                 // Has one or more categories
                 accountRef += $"{trx.AccountSplits.Where(ac => IsCategory(ac.Account.AccountType)).FirstOrDefault().Account.Name}";
-                memo = trx.Memo;
             }
             else if (trx.AccountSplits.Where(ac => IsAccount(ac.Account.AccountType)).Count<IAccountSplit>() > 1)
             {
                 // Has more than one account so is an account transfer
                 //TODO: Check if there could be multiple account transfers in a split - tricky
                 accountRef += $"[{trx.AccountSplits.Where(ac => IsAccount(ac.Account.AccountType) && ac.Account.Guid != parentAcc.Guid).FirstOrDefault().Account.Name}]";
-                memo = trx.Description;
             }
             else
             {
@@ -65,7 +62,9 @@ namespace GnuCash.Sql2Qif.Library
             output.WriteLine($"D{trx.DatePosted.ToString("MM/d/yyyy")}"); // TODO: Check QIF's supported date formats
             output.WriteLine($"U{trxValue}");
             output.WriteLine($"T{trxValue}");
-            output.WriteLine($"P{memo}");
+            output.WriteLine($"P{trx.Description}");
+            output.WriteLine($"M{trx.Memo}");
+
             if (trx.Reconciled.ToLower().Equals("y") ||
                 trx.Reconciled.ToLower().Equals("c"))
             {
