@@ -9,5 +9,10 @@ namespace GnuCash.Sql2Qif.Library.BLL
         public IAccount Account { get; set; }
         public string Reconciled { get; set; }
         public decimal Trxvalue { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Account.ToString()} / {Trxvalue.ToString()}";
+        }
     }
 }

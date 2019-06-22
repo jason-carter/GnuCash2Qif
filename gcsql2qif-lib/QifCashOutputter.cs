@@ -11,15 +11,11 @@ namespace GnuCash.Sql2Qif.Library
         {
             using (var writer = File.CreateText(outputFileName))
             {
-                Write(accounts, writer);
-            }
-        }
 
-        public void Write(List<IAccount> accounts, StreamWriter outputFile)
-        {
-            WriteCategoryList(accounts, outputFile);
-            WriteAccountList(accounts, outputFile);
-            WriteTransactionListByAccount(accounts, outputFile);
+                WriteCategoryList(accounts, writer);
+                WriteAccountList(accounts, writer);
+                WriteTransactionListByAccount(accounts, writer);
+            }
         }
 
         private void WriteTransactionListByAccount(List<IAccount> accounts, StreamWriter outputFile)
@@ -155,6 +151,7 @@ namespace GnuCash.Sql2Qif.Library
 
         private string QifAccountType(string accType)
         {
+            
             return accType == "BANK" ? "Bank" :
                     accType == "CREDIT" ? "CCard" :
                     accType == "ASSET" ? "Oth A" :

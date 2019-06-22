@@ -7,6 +7,5 @@ namespace GnuCash.Sql2Qif.Library
     interface ICashOutputter
     {
         void Write(List<IAccount> accounts, string outputFileName);
-        void Write(List<IAccount> accounts, StreamWriter outputFile);
     }
 }
