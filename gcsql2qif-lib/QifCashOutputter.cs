@@ -1,4 +1,5 @@
 ﻿using GnuCash.Sql2Qif.Library.BLL;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,13 +8,27 @@ namespace GnuCash.Sql2Qif.Library
 {
     class QifCashOutputter : ICashOutputter
     {
+        public event EventHandler<LogEventArgs> LogEvent;
+
+        private void OnLogEvent(string level, string logMessage)
+        {
+            LogEventArgs args = new LogEventArgs()
+            {
+                LogLevel = level,
+                LogMessage = logMessage
+            };
+            LogEvent?.Invoke(this, args);
+        }
+
         public void Write(List<IAccount> accounts, string outputFileName)
         {
             using (var writer = File.CreateText(outputFileName))
             {
-
+                OnLogEvent("INFO", "Writing category section...");
                 WriteCategoryList(accounts, writer);
+                OnLogEvent("INFO", "Writing accounts section...");
                 WriteAccountList(accounts, writer);
+                OnLogEvent("INFO", "Writing transactions by accounts...");
                 WriteTransactionListByAccount(accounts, writer);
             }
         }
@@ -55,7 +70,7 @@ namespace GnuCash.Sql2Qif.Library
             }
             else
             {
-                //TODO: Warning Transaction with no categories and only one account reference
+                OnLogEvent("WARNING", $"Transaction {trx.ToString()} has no categories and only one account reference ({mainParentAccount.ToString()})");
             }
 
             output.WriteLine($"D{trx.DatePosted.ToString("MM/d/yyyy")}"); // TODO: Check QIF's supported date formats
@@ -144,19 +159,32 @@ namespace GnuCash.Sql2Qif.Library
 
         private string QifCategoryType(string catType)
         {
-            return catType == "INCOME" ? "I" :
-                   catType == "EXPENSE" ? "E" :
-                   "?"; // TODO: WARNING Unknown Category Type
+            var qifCatType = catType == "INCOME" ? "I" :
+                             catType == "EXPENSE" ? "E" :
+                             "?";
+
+            if (qifCatType == "?")
+            {
+                OnLogEvent("WARNING", $"Unknown category type: {catType}");
+            }
+
+            return qifCatType;
         }
 
         private string QifAccountType(string accType)
         {
-            
-            return accType == "BANK" ? "Bank" :
-                    accType == "CREDIT" ? "CCard" :
-                    accType == "ASSET" ? "Oth A" :
-                    accType == "LIABILITY" ? "Oth L" :
-                    "?"; // TODO: WARNING Unknown Account Type
+            var qifAccType = accType == "BANK" ? "Bank" :
+                             accType == "CREDIT" ? "CCard" :
+                             accType == "ASSET" ? "Oth A" :
+                             accType == "LIABILITY" ? "Oth L" :
+                             "?";
+
+            if (qifAccType == "?")
+            {
+                OnLogEvent("WARNING", $"Unknown account type: {accType}");
+            }
+
+            return qifAccType;
         }
     }
 }

@@ -11,7 +11,7 @@ namespace GnuCash.Sql2Qif.Library
     {
         public event EventHandler<LogEventArgs> LogEvent;
 
-        protected void OnLogEvent(string level, string logMessage)
+        private void OnLogEvent(string level, string logMessage)
         {
             LogEventArgs args = new LogEventArgs()
             {
@@ -32,7 +32,14 @@ namespace GnuCash.Sql2Qif.Library
             List<ITransaction> transactions = (new TransactionDAO()).Extract(dataSource, accounts).ToList<ITransaction>();
             // TODO: Log some useful information like number of transactions, number of transactions per account
 
-            (new QifCashOutputter()).Write(accounts, outputFileName);
+            var qifOutputter = new QifCashOutputter();
+            qifOutputter.LogEvent += HandleLogEvent;
+            qifOutputter.Write(accounts, outputFileName);
+        }
+
+        private void HandleLogEvent(object sender, LogEventArgs args)
+        {
+            OnLogEvent(args.LogLevel, args.LogMessage);
         }
     }
 }

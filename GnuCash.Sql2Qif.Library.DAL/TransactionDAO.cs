@@ -126,8 +126,9 @@ namespace GnuCash.Sql2Qif.Library.DAL
 
             if (account == null)
             {
-                //TODO: Report WARNING Unknown account on transaction {Guid}
-                return;
+                // This should never happen unless there's a problem with the gnucash database
+                throw new Exception($"Unknown account on transaction {accountGuid}, could be due to corrupt GnuCash database");
+                //TODO: If this is a problem we may well be able to simply ignore it and return from fuction without an error...
             }
 
             // Wrap the account up into a split to represent double entry accounting
