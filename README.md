@@ -1,18 +1,14 @@
 # GnuCash2Qif
 Convert GnuCash Sqlite database to QIF format
 
-This is still a WIP and not yet ready for general use. Major refactors are happening every time I add or change something at the moment, but feel free to play around with it.
+I've used GnuCash for a number of years and am generally happy with it, although of late I have experienced a some frustrations. I would like to update my accounts from an iPad rather than on a full desktop PC, yet there are no good iPad application that I can find, and  the closed-garden model of Apple seems to discourage any official port to iOS. Also, from my experience with using other accounts packages, I like the search bar function that filters the transactions in real-time allowing you to focus in on a specific category or type of transaction. The search facilities in GnuCash feel out-dated in comparison, infact the user interface in general is starting to feel a little dated.
+
+With these in mind I thought I would try some other personal finance package to see if they meet my requirements, but was surprised to find a lack of export options, particular for the de-facto QIF standard. 
 
 ## To Do
 
- - ~~Extract and Output transaction functionality~~
- - ~~Output to a file (currently outputs to System Out) : Probably need to move the QIF output functions from the BLL objects to an output format object to allow for larger resultsets being returned~~
- - ~~Add warnings/errors to the output (pass back to gui layer via event)~~
- - ~~Add the CLI Options project properly~~
- - Change this Readme.md with usage instructions (and move this roadmap - or what will be a roadmap - to the wiki)
- - Add a mapping function for categories? Not sure about this
- - Consider a WPF UI (now that MS are supporting it going forward)
  - Add Unity / DI and Unit Tests (would normally have done this first if it wasn't experimental)
+ - Consider a WPF UI (now that MS are supporting it going forward)
 
 ## Longer-term Possibilities
 These ideas interest me so I might explore them later once this project is mature enough.
