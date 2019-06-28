@@ -10,9 +10,3 @@ With these in mind I thought I would try some other personal finance package to 
  - Add Unity / DI and Unit Tests (would normally have done this first if it wasn't experimental)
  - Consider a WPF UI (now that MS are supporting it going forward)
 
-## Longer-term Possibilities
-These ideas interest me so I might explore them later once this project is mature enough.
-
- - Is it possible to do this in pure SQL? Was nearly there at the start of this project but merging the double entries proved difficult.
- - Add [journal](https://hledger.org/journal.html) as an output format, so I can explore [Plain Text Accounting](https://plaintextaccounting.org/)
- - Rewrite in functional language (Haskell or Erlang are the ones's I know and would like to learn deeper)
