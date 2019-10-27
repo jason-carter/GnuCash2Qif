@@ -9,6 +9,8 @@ I've used GnuCash for a number of years and am generally happy with it, although
 
 With these in mind I thought I would try some other personal finance package to see if they meet my requirements, but was surprised to find a lack of export options, particular for the de-facto QIF standard. This utility fills that gap.
 
+For those who would prefer a Java version of this utility, I've also written one in another repo: https://github.com/Jason-Carter/jGnuCash2Qif
+
 # Build Prerequesites
 
 To build GnuCash2Qif you will require the following installed on your system:
