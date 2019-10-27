@@ -146,7 +146,7 @@ namespace GnuCash.Sql2Qif.Library
         private bool IsCategory(string catType)
         {
             return (catType == "EXPENSE" ||
-                    catType == "INCOME") ? true : false;
+                    catType == "INCOME");
         }
 
         private bool IsAccount(string catType)
@@ -154,7 +154,7 @@ namespace GnuCash.Sql2Qif.Library
             return (catType == "ASSET" ||
                     catType == "CREDIT" ||
                     catType == "BANK" ||
-                    catType == "LIABILITY") ? true : false;
+                    catType == "LIABILITY");
         }
 
         private string QifCategoryType(string catType)

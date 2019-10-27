@@ -124,11 +124,11 @@ namespace GnuCash.Sql2Qif.Library.DAL
 
             var account = accounts.Where<IAccount>(a => a.Guid == accountGuid).FirstOrDefault<IAccount>();
 
-            if (account == null)
+            if (account == null)    
             {
                 // This should never happen unless there's a problem with the gnucash database
                 throw new Exception($"Unknown account on transaction {accountGuid}, could be due to corrupt GnuCash database");
-                //TODO: If this is a problem we may well be able to simply ignore it and return from fuction without an error...
+                //TODO: If this is a problem we may well be able to simply ignore it and return from function without an error...
             }
 
             // Wrap the account up into a split to represent double entry accounting
@@ -149,8 +149,7 @@ namespace GnuCash.Sql2Qif.Library.DAL
 
          private bool IsCategory(string catType)
         {
-            return (catType == "EXPENSE" ||
-                    catType == "INCOME") ? true : false;
+            return (catType == "EXPENSE" || catType == "INCOME");
         }
     }
 }
