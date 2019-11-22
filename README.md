@@ -53,10 +53,18 @@ https://github.com/Jason-Carter/GnuCash2Qif/releases
 This has been built using the build instructions above and contains all of the associated libraries in one executable.
 
 # Usage
+If you have built the project but not packaged it into an single executable you can run the GnuCashSql2Qif utility as follows:
 
 ```
 $ dotnet GnuCashSql2Qif.dll -d "C:/accounts.sql.gnucash.sqlite" -o "C:/output.qif"
 ```
+
+If you have created a single executable then you can use the following:
+
+```
+$ GnuCashSql2Qif.exe -d "C:/accounts.sql.gnucash.sqlite" -o "C:/output.qif"
+```
+
 # Options
 
  * `-d` Datafile for GnuCash: Must be an SQL Lite datafile (does not work with the XML files)
