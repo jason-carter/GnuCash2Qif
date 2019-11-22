@@ -17,17 +17,43 @@ To build GnuCash2Qif you will require the following installed on your system:
 
  * Microsoft .Net Core 2.1.0
 
-This should be available from Micorost for Windows, OS X and Linux systems.
+This should be available from Microsoft for Windows, OS X and Linux systems.
 
 
 # Build Instructions
+GnuCash2Qif can be build in Visual Studio, or by following these command line instructions:
 
 ```
 $ git clone https://github.com/Jason-Carter/GnuCash2Qif.git
 $ cd GnuCash2Qif
 $ dotnet build GnuCash2Qif.sln
 ```
+
+If you want to package this into a single executable, you can use a utility called dotnet-warp which is installable as follows:
+
+```
+$ dotnet tool install -g dotnet-warp
+```
+
+(I've followed Scott Hanselman's instrucntions for this from his following blog entry: https://www.hanselman.com/blog/BrainstormingCreatingASmallSingleSelfcontainedExecutableOutOfANETCoreApplication.aspx)
+
+Once installed, from the .\GnuCashSql2Qif console project run dotnet-warp:
+
+```
+$ dotnet-warp
+```
+
+This will create a GnuCashSql2Qif.exe under the GnuCashSql2Qif project folder.
+
+# Prebuild Download
+In the releases area of this repository you can download a single executable:
+
+https://github.com/Jason-Carter/GnuCash2Qif/releases
+
+This has been built using the build instructions above and contains all of the associated libraries in one executable.
+
 # Usage
+
 ```
 $ dotnet GnuCashSql2Qif.dll -d "C:/accounts.sql.gnucash.sqlite" -o "C:/output.qif"
 ```
