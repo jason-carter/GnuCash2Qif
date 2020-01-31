@@ -15,7 +15,7 @@ For those who would prefer a Java version of this utility, I've also written one
 
 To build GnuCash2Qif you will require the following installed on your system:
 
- * Microsoft .Net Core 2.1.0
+ * Microsoft .Net Core 3.1
 
 This should be available from Microsoft for Windows, OS X and Linux systems.
 
@@ -29,21 +29,49 @@ $ cd GnuCash2Qif
 $ dotnet build GnuCash2Qif.sln
 ```
 
-If you want to package this into a single executable, you can use a utility called dotnet-warp which is installable as follows:
+If you want to package this into a single executable, with unused modules removed (trimmed), you can use the following command:
 
 ```
-$ dotnet tool install -g dotnet-warp
+$ dotnet publish -c release -r win10-x64 /p:PublishSingleFile=true /p:PublishTrimmed=true
 ```
 
-(I've followed Scott Hanselman's instrucntions for this from his following blog entry: https://www.hanselman.com/blog/BrainstormingCreatingASmallSingleSelfcontainedExecutableOutOfANETCoreApplication.aspx)
-
-Once installed, from the .\GnuCashSql2Qif console project run dotnet-warp:
+Ignore the errors on the DLL projects (I'll see if I can suppress them another time), as long as the main command line project GnuCashSql2Qif publishes then a single EXE should be created. Lookout for the following output:
 
 ```
-$ dotnet-warp
+GnuCashSql2Qif -> C:\Users\xxxx\source\repos\GnuCashSql2Qif\GnuCashSql2Qif\bin\Release\netcoreapp3.1\win10-x64\publish\
 ```
 
-This will create a GnuCashSql2Qif.exe under the GnuCashSql2Qif project folder.
+This is where the GnuCashSql2Qif.exe single executable will be published. A directory listing of that folder should show the following:
+
+```
+Directory: C:\Users\jjcar\source\repos\GnuCashSql2Qif\GnuCash2QifGui\bin\Release\netcoreapp3.1\win10-x64\publish
+
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+-a----       31/01/2020     21:28       90900956 GnuCash2QifGui.exe
+-a----       31/01/2020     21:27           2416 GnuCash2QifGui.pdb
+```
+Calling GnuCashSql2Qif.exe on its own should return the following:
+```
+GnuCashSql2Qif 1.0.0
+Copyright (C) 2020 GnuCashSql2Qif
+
+ERROR(S):
+  Required option 'd, DataSource' is missing.
+  Required option 'o, Output' is missing.
+
+  -d, --DataSource    Required. Full path to the Sqlite file
+
+  -o, --Output        Required. Output file
+
+  --help              Display this help screen.
+
+  --version           Display version information.
+````
+The GnuCashSql2Qif.exe can now be copied as a single file, and contains everything required to run on other (Windows 10) systems, including the .Net Core 3.1 runtime.
+
+Note: to run the executable on other systems the ```dotnet publish``` command would require different parameters which I haven't tested.
 
 # Prebuild Download
 In the releases area of this repository you can download a single executable:
