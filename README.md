@@ -44,7 +44,7 @@ GnuCashSql2Qif -> C:\Users\xxxx\source\repos\GnuCashSql2Qif\GnuCashSql2Qif\bin\R
 This is where the GnuCashSql2Qif.exe single executable will be published. A directory listing of that folder should show the following:
 
 ```
-Directory: C:\Users\jjcar\source\repos\GnuCashSql2Qif\GnuCash2QifGui\bin\Release\netcoreapp3.1\win10-x64\publish
+Directory: C:\Users\xxxx\source\repos\GnuCashSql2Qif\GnuCash2QifGui\bin\Release\netcoreapp3.1\win10-x64\publish
 
 
 Mode                LastWriteTime         Length Name
