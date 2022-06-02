@@ -18,10 +18,13 @@ namespace GnuCashSql2Qif
 
                         // TODO: check the output file doesn't exist, confirm overwrite if it does
 
-                        var runExtract = new Extractor(new SqlLiteAccountDAO(), new SqlLiteTransactionDAO(), new QifCashOutputter());
+                        var runExtract = new Extractor(new SqlLiteAccountDAO(), new SqlLiteTransactionDAO());
                         runExtract.LogEvent += HandleLogEvent;
 
-                        runExtract.ExtractData(a.DataSource, a.Output);
+                        var accounts = runExtract.ExtractData(a.DataSource);
+
+                        var qifOutputter = new QifCashOutputter();
+                        qifOutputter.Write(accounts, a.Output);
 
                         WriteLog("INFO", "GnuCashSql2Qif successfully completed.");
                         Environment.Exit(0);

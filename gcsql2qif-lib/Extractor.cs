@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using GnuCash.Sql2Qif.Library.DAL;
 using GnuCash.Sql2Qif.Library.BLL;
 using System.Linq;
@@ -12,13 +11,12 @@ namespace GnuCash.Sql2Qif.Library
         public event EventHandler<LogEventArgs> LogEvent;
         public IAccountDAO accDAO;
         public ITransactionDAO trxDAO;
-        public ICashOutputter cashOutputter;
 
-        public Extractor(IAccountDAO accDAO, ITransactionDAO trxDAO, ICashOutputter cashOutputter)
+
+        public Extractor(IAccountDAO accDAO, ITransactionDAO trxDAO)
         {
             this.accDAO = accDAO;
             this.trxDAO = trxDAO;
-            this.cashOutputter = cashOutputter;
         }
 
         private void OnLogEvent(string level, string logMessage)
@@ -31,7 +29,7 @@ namespace GnuCash.Sql2Qif.Library
             LogEvent?.Invoke(this, args);
         }
 
-        public void ExtractData(string dataSource, string outputFileName)
+        public List<IAccount> ExtractData(string dataSource)
         {
 
             OnLogEvent("INFO", "Extracting accounts...");
@@ -43,8 +41,7 @@ namespace GnuCash.Sql2Qif.Library
             List<ITransaction> transactions = trxDAO.Extract(dataSource, accounts).ToList<ITransaction>();
             // TODO: Log some useful information like number of transactions, number of transactions per account
 
-            cashOutputter.LogEvent += HandleLogEvent;
-            cashOutputter.Write(accounts, outputFileName);
+            return accounts;
         }
 
         private void HandleLogEvent(object sender, LogEventArgs args)
