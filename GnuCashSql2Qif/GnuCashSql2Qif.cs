@@ -1,6 +1,7 @@
 ﻿using System;
 using GnuCash.Sql2Qif.Library;
 using CommandLine;
+using GnuCash.Sql2Qif.Library.DAL;
 
 namespace GnuCashSql2Qif
 {
@@ -17,7 +18,7 @@ namespace GnuCashSql2Qif
 
                         // TODO: check the output file doesn't exist, confirm overwrite if it does
 
-                        var runExtract = new Extractor();
+                        var runExtract = new Extractor(new SqlLiteAccountDAO(), new SqlLiteTransactionDAO(), new QifCashOutputter());
                         runExtract.LogEvent += HandleLogEvent;
 
                         runExtract.ExtractData(a.DataSource, a.Output);

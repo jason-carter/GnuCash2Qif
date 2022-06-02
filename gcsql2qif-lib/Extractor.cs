@@ -10,6 +10,16 @@ namespace GnuCash.Sql2Qif.Library
     public class Extractor
     {
         public event EventHandler<LogEventArgs> LogEvent;
+        public IAccountDAO accDAO;
+        public ITransactionDAO trxDAO;
+        public ICashOutputter cashOutputter;
+
+        public Extractor(IAccountDAO accDAO, ITransactionDAO trxDAO, ICashOutputter cashOutputter)
+        {
+            this.accDAO = accDAO;
+            this.trxDAO = trxDAO;
+            this.cashOutputter = cashOutputter;
+        }
 
         private void OnLogEvent(string level, string logMessage)
         {
@@ -23,18 +33,18 @@ namespace GnuCash.Sql2Qif.Library
 
         public void ExtractData(string dataSource, string outputFileName)
         {
+
             OnLogEvent("INFO", "Extracting accounts...");
-            List<IAccount> accounts = (new AccountDAO()).Extract(dataSource).ToList<IAccount>();
+            List<IAccount> accounts = accDAO.Extract(dataSource).ToList<IAccount>();
 
             // TODOO: Log some useful information like number of accounts, number of type of accounts
 
             OnLogEvent("INFO", "Extracting transactions...");
-            List<ITransaction> transactions = (new TransactionDAO()).Extract(dataSource, accounts).ToList<ITransaction>();
+            List<ITransaction> transactions = trxDAO.Extract(dataSource, accounts).ToList<ITransaction>();
             // TODO: Log some useful information like number of transactions, number of transactions per account
 
-            var qifOutputter = new QifCashOutputter();
-            qifOutputter.LogEvent += HandleLogEvent;
-            qifOutputter.Write(accounts, outputFileName);
+            cashOutputter.LogEvent += HandleLogEvent;
+            cashOutputter.Write(accounts, outputFileName);
         }
 
         private void HandleLogEvent(object sender, LogEventArgs args)

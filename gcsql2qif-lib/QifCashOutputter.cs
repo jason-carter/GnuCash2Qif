@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace GnuCash.Sql2Qif.Library
 {
-    class QifCashOutputter : ICashOutputter
+    public class QifCashOutputter : ICashOutputter
     {
         public event EventHandler<LogEventArgs> LogEvent;
 
