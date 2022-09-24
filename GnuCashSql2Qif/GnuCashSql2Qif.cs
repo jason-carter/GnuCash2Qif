@@ -38,7 +38,7 @@ namespace GnuCashSql2Qif
                         var accounts = runExtract.ExtractData(a.DataSource);
 
                         var qifLogger = loggerFactory.CreateLogger<QifCashOutputter>();
-                        var qifOutputter = new QifCashOutputter();
+                        var qifOutputter = new QifCashOutputter(qifLogger);
                         qifOutputter.Write(accounts, a.Output);
 
                         gnuCashLogger.LogInformation("GnuCashSql2Qif successfully completed.");
