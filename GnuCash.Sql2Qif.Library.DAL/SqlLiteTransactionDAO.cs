@@ -7,7 +7,7 @@ using System.Globalization;
 
 namespace GnuCash.Sql2Qif.Library.DAL
 {
-    public class TransactionDAO
+    public class SqlLiteTransactionDAO : ITransactionDAO
     {
         readonly string sql = @"
             with recursive cteCategories(guid, name, account_type, parent_guid, code, description, hidden, placeholder, level, path) AS

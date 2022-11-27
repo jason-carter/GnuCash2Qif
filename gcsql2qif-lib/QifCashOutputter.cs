@@ -1,4 +1,6 @@
 ﻿using GnuCash.Sql2Qif.Library.BLL;
+using GnuCash.Sql2Qif.Library.DAL;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,29 +8,25 @@ using System.Linq;
 
 namespace GnuCash.Sql2Qif.Library
 {
-    class QifCashOutputter : ICashOutputter
+    public class QifCashOutputter : ICashOutputter
     {
-        public event EventHandler<LogEventArgs> LogEvent;
+        //public event EventHandler<LogEventArgs> LogEvent;
+        private readonly ILogger logger;
 
-        private void OnLogEvent(string level, string logMessage)
+        public QifCashOutputter(ILogger<QifCashOutputter> logger)
         {
-            LogEventArgs args = new LogEventArgs()
-            {
-                LogLevel = level,
-                LogMessage = logMessage
-            };
-            LogEvent?.Invoke(this, args);
+            this.logger = logger;
         }
 
         public void Write(List<IAccount> accounts, string outputFileName)
         {
             using (var writer = File.CreateText(outputFileName))
             {
-                OnLogEvent("INFO", "Writing category section...");
+                logger.LogInformation("Writing category section...");
                 WriteCategoryList(accounts, writer);
-                OnLogEvent("INFO", "Writing accounts section...");
+                logger.LogInformation("Writing accounts section...");
                 WriteAccountList(accounts, writer);
-                OnLogEvent("INFO", "Writing transactions by accounts...");
+                logger.LogInformation("Writing transactions by accounts...");
                 WriteTransactionListByAccount(accounts, writer);
             }
         }
@@ -70,7 +68,7 @@ namespace GnuCash.Sql2Qif.Library
             }
             else
             {
-                OnLogEvent("WARNING", $"Transaction {trx.ToString()} has no categories and only one account reference ({mainParentAccount.ToString()})");
+                logger.LogWarning($"Transaction {trx.ToString()} has no categories and only one account reference ({mainParentAccount.ToString()})");
             }
 
             output.WriteLine($"D{trx.DatePosted.ToString("MM/d/yyyy")}"); // TODO: Check QIF's supported date formats
@@ -165,7 +163,7 @@ namespace GnuCash.Sql2Qif.Library
 
             if (qifCatType == "?")
             {
-                OnLogEvent("WARNING", $"Unknown category type: {catType}");
+                logger.LogWarning($"Unknown category type: {catType}");
             }
 
             return qifCatType;
@@ -181,7 +179,7 @@ namespace GnuCash.Sql2Qif.Library
 
             if (qifAccType == "?")
             {
-                OnLogEvent("WARNING", $"Unknown account type: {accType}");
+                logger.LogWarning($"Unknown account type: {accType}");
             }
 
             return qifAccType;

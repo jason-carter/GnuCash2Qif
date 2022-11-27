@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using GnuCash.Sql2Qif.Library.BLL;
 
 namespace GnuCash.Sql2Qif.Library
 {
-    interface ICashOutputter
+    public interface ICashOutputter
     {
-        event EventHandler<LogEventArgs> LogEvent;
         void Write(List<IAccount> accounts, string outputFileName);
     }
 }

@@ -6,7 +6,7 @@ using GnuCash.Sql2Qif.Library.BLL;
 
 namespace GnuCash.Sql2Qif.Library.DAL
 {
-    public class AccountDAO
+    public class SqlLiteAccountDAO : IAccountDAO
     {
         readonly string sql = @"
             with recursive cteAccounts(guid, name, account_type, parent_guid, code, description, hidden, placeholder, level, path) AS

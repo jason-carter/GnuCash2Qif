@@ -1,6 +1,8 @@
 ﻿using System;
 using GnuCash.Sql2Qif.Library;
 using CommandLine;
+using GnuCash.Sql2Qif.Library.DAL;
+using Microsoft.Extensions.Logging;
 
 namespace GnuCashSql2Qif
 {
@@ -8,7 +10,17 @@ namespace GnuCashSql2Qif
     {
         static void Main(string[] args)
         {
-            try { 
+            //var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+            var loggerFactory = LoggerFactory.Create(builder => builder.AddSimpleConsole(options =>
+            {
+                options.IncludeScopes = true;
+                options.SingleLine = true;
+                options.TimestampFormat = "yyyy/MM/dd hh:mm:ss ";
+            }));
+            var gnuCashLogger = loggerFactory.CreateLogger<GnuCashSql2Qif>();
+
+            try
+            { 
             Parser.Default.ParseArguments<CommandLineOptions>(args)
                 .WithParsed(a =>
                     {
@@ -17,12 +29,19 @@ namespace GnuCashSql2Qif
 
                         // TODO: check the output file doesn't exist, confirm overwrite if it does
 
-                        var runExtract = new Extractor();
-                        runExtract.LogEvent += HandleLogEvent;
+                        var extractLogger = loggerFactory.CreateLogger<Extractor>();
+                        var sqlAccDao = new SqlLiteAccountDAO();
+                        var sqlTrxDao = new SqlLiteTransactionDAO();
 
-                        runExtract.ExtractData(a.DataSource, a.Output);
+                        var runExtract = new Extractor(extractLogger, sqlAccDao, sqlTrxDao);
 
-                        WriteLog("INFO", "GnuCashSql2Qif successfully completed.");
+                        var accounts = runExtract.ExtractData(a.DataSource);
+
+                        var qifLogger = loggerFactory.CreateLogger<QifCashOutputter>();
+                        var qifOutputter = new QifCashOutputter(qifLogger);
+                        qifOutputter.Write(accounts, a.Output);
+
+                        gnuCashLogger.LogInformation("GnuCashSql2Qif successfully completed.");
                         Environment.Exit(0);
                     });
                     // Cleaner output without the error message
@@ -34,19 +53,9 @@ namespace GnuCashSql2Qif
             }
             catch (Exception ex)
             {
-                WriteLog("ERROR", $"Exiting GnuCashSql2Qif because the following error was thrown: {ex.Message}");
+                gnuCashLogger.LogError($"Exiting GnuCashSql2Qif because the following error was thrown: {ex.Message}");
                 Environment.Exit(-2);
             }
-        }
-
-        static void WriteLog(string level, string message)
-        {
-            Console.WriteLine($"{DateTime.Now} {level} {message}");
-        }
-
-        static void HandleLogEvent(object sender, LogEventArgs args)
-        {
-            WriteLog(args.LogLevel, args.LogMessage);
         }
     }
 }

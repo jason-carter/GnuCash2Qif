@@ -1,45 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using GnuCash.Sql2Qif.Library.DAL;
 using GnuCash.Sql2Qif.Library.BLL;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 
 namespace GnuCash.Sql2Qif.Library
 {
     public class Extractor
     {
-        public event EventHandler<LogEventArgs> LogEvent;
+        //public event EventHandler<LogEventArgs> LogEvent;
+        private readonly ILogger logger;
+        private readonly IAccountDAO accDAO;
+        private readonly ITransactionDAO trxDAO;
 
-        private void OnLogEvent(string level, string logMessage)
+        public Extractor(ILogger<Extractor> logger, IAccountDAO accDAO, ITransactionDAO trxDAO)
         {
-            LogEventArgs args = new LogEventArgs()
-            {
-                LogLevel = level,
-                LogMessage = logMessage
-            };
-            LogEvent?.Invoke(this, args);
+            this.logger = logger;
+            this.accDAO = accDAO;
+            this.trxDAO = trxDAO;
         }
 
-        public void ExtractData(string dataSource, string outputFileName)
+        public List<IAccount> ExtractData(string dataSource)
         {
-            OnLogEvent("INFO", "Extracting accounts...");
-            List<IAccount> accounts = (new AccountDAO()).Extract(dataSource).ToList<IAccount>();
+            logger.LogInformation("Extracting accounts...");
+            List<IAccount> accounts = accDAO.Extract(dataSource).ToList<IAccount>();
 
             // TODOO: Log some useful information like number of accounts, number of type of accounts
 
-            OnLogEvent("INFO", "Extracting transactions...");
-            List<ITransaction> transactions = (new TransactionDAO()).Extract(dataSource, accounts).ToList<ITransaction>();
+            logger.LogInformation("Extracting transactions...");
+            List<ITransaction> transactions = trxDAO.Extract(dataSource, accounts).ToList<ITransaction>();
             // TODO: Log some useful information like number of transactions, number of transactions per account
 
-            var qifOutputter = new QifCashOutputter();
-            qifOutputter.LogEvent += HandleLogEvent;
-            qifOutputter.Write(accounts, outputFileName);
-        }
-
-        private void HandleLogEvent(object sender, LogEventArgs args)
-        {
-            OnLogEvent(args.LogLevel, args.LogMessage);
+            return accounts;
         }
     }
 }
