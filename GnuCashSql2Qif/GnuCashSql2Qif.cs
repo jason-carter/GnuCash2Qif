@@ -29,11 +29,10 @@ namespace GnuCashSql2Qif
 
                         // TODO: check the output file doesn't exist, confirm overwrite if it does
 
-                        var extractLogger = loggerFactory.CreateLogger<Extractor>();
-                        var sqlAccDao = new SqlLiteAccountDAO();
-                        var sqlTrxDao = new SqlLiteTransactionDAO();
+                        var sqlAccDao = new SqlLiteAccountDAO(loggerFactory.CreateLogger<SqlLiteAccountDAO>());
+                        var sqlTrxDao = new SqlLiteTransactionDAO(loggerFactory.CreateLogger<SqlLiteTransactionDAO>());
 
-                        var runExtract = new Extractor(extractLogger, sqlAccDao, sqlTrxDao);
+                        var runExtract = new Extractor(loggerFactory.CreateLogger<Extractor>(), sqlAccDao, sqlTrxDao);
 
                         var accounts = runExtract.ExtractData(a.DataSource);
 

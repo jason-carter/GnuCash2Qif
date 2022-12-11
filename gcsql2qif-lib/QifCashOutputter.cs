@@ -36,7 +36,7 @@ namespace GnuCash.Sql2Qif.Library
             outputFile.WriteLine("!Option:AutoSwitch"); // Indicates start of the account list (with transactions this time)
 
             // Transaction section by account
-            accounts.FindAll(n => IsAccount(n.AccountType))
+            accounts.FindAll(n => n.IsAccount)
                 .ToList().ForEach(n => QifAccountTransactionOutput(n, outputFile));
         }
 
@@ -49,22 +49,22 @@ namespace GnuCash.Sql2Qif.Library
         private void QifTransactionOutput(IAccount parentAcc, ITransaction trx, StreamWriter output)
         {
             // Use the transaction value of the parent account
-            var mainParentAccount = trx.AccountSplits.Where(ac => IsAccount(ac.Account.AccountType) && ac.Account.Guid == parentAcc.Guid).FirstOrDefault();
-            var trxValue = mainParentAccount.Trxvalue;
-            var isReconciled = IsReconciled(mainParentAccount.Reconciled);
+            var mainParentAccount = trx.AccountSplits.Where(ac => ac.Account.IsAccount && ac.Account.Guid == parentAcc.Guid).FirstOrDefault();
+            var trxValue = mainParentAccount.TrxValue;
+            var isReconciled = IsReconciled(mainParentAccount.IsReconciled);
             var accountRef = "";
 
-            if (trx.AccountSplits.Where(ac => IsCategory(ac.Account.AccountType)).Count<IAccountSplit>() > 0)
+            if (trx.AccountSplits.Where(ac => ac.Account.IsCategory).Count<IAccountSplit>() > 0)
             {
                 // Has one or more category accounts
                 // TODO: Consider supporting multiple splits, for now just grab the first one
-                accountRef += $"{trx.AccountSplits.Where(ac => IsCategory(ac.Account.AccountType)).FirstOrDefault().Account.Name}";
+                accountRef += $"{trx.AccountSplits.Where(ac => ac.Account.IsCategory).FirstOrDefault().Account.Name}";
             }
-            else if (trx.AccountSplits.Where(ac => IsAccount(ac.Account.AccountType)).Count<IAccountSplit>() > 1)
+            else if (trx.AccountSplits.Where(ac => ac.Account.IsAccount).Count<IAccountSplit>() > 1)
             {
                 // Has more than one account so is an account transfer
                 //TODO: Check if there could be multiple account transfers in a split - tricky
-                accountRef += $"[{trx.AccountSplits.Where(ac => IsAccount(ac.Account.AccountType) && ac.Account.Guid != parentAcc.Guid).FirstOrDefault().Account.Name}]";
+                accountRef += $"[{trx.AccountSplits.Where(ac => ac.Account.IsAccount && ac.Account.Guid != parentAcc.Guid).FirstOrDefault().Account.Name}]";
             }
             else
             {
@@ -72,9 +72,9 @@ namespace GnuCash.Sql2Qif.Library
             }
 
             output.WriteLine($"D{trx.DatePosted.ToString("MM/d/yyyy")}"); // TODO: Check QIF's supported date formats
-            if (trx.Ref != null && !trx.Ref.Equals(string.Empty))
+            if (trx.Reference != null && !trx.Reference.Equals(string.Empty))
             {
-                output.WriteLine($"N{trx.Ref}");
+                output.WriteLine($"N{trx.Reference}");
             }
             output.WriteLine($"U{trxValue}");
             output.WriteLine($"T{trxValue}");
@@ -104,7 +104,7 @@ namespace GnuCash.Sql2Qif.Library
             outputFile.WriteLine("!Option:AutoSwitch"); // Indicates start of the account list
 
             outputFile.WriteLine("!Account");
-            accounts.FindAll(n => IsAccount(n.AccountType))
+            accounts.FindAll(n => n.IsAccount)
                 .ToList().ForEach(n => QifAccountOutput(n, outputFile));
 
             outputFile.WriteLine("!Clear:AutoSwitch");  // Indicates end of the account list
@@ -122,7 +122,7 @@ namespace GnuCash.Sql2Qif.Library
         {
             // Category section (expense / income accounts)
             outputFile.WriteLine("!Type:Cat");
-            accounts.FindAll(n => IsCategory(n.AccountType))
+            accounts.FindAll(n => n.IsCategory)
                 .ToList().ForEach(n => QifCategoryOutput(n, outputFile));
         }
 
@@ -139,20 +139,6 @@ namespace GnuCash.Sql2Qif.Library
             // Assuming 'cleared' accounts are reconciled
             return (isReconciled.ToLower().Equals("y") ||
                     isReconciled.ToLower().Equals("c"));
-        }
-
-        private bool IsCategory(string catType)
-        {
-            return (catType == "EXPENSE" ||
-                    catType == "INCOME");
-        }
-
-        private bool IsAccount(string catType)
-        {
-            return (catType == "ASSET" ||
-                    catType == "CREDIT" ||
-                    catType == "BANK" ||
-                    catType == "LIABILITY");
         }
 
         private string QifCategoryType(string catType)
