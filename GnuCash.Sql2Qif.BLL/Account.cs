@@ -4,9 +4,9 @@ namespace GnuCash.Sql2Qif.Library.BLL
 {
     public class Account : IAccount
     {
-        public Account ()
+        public Account()
         {
-            Transactions = new List<ITransaction>();
+            Transactions = new Dictionary<string, ITransaction>();
         }
 
         public Account(string guid, string name, string description, string accountType)
@@ -15,14 +15,14 @@ namespace GnuCash.Sql2Qif.Library.BLL
             Name = name;
             Description = description;
             AccountType = accountType;
-            Transactions = new List<ITransaction>();
+            Transactions = new Dictionary<string, ITransaction>();
         }
 
         public string Guid { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string AccountType { get; set; }
-        public List<ITransaction> Transactions { get; set; }
+        public Dictionary<string, ITransaction> Transactions { get; set; }
 
         public bool IsAccount => AccountType.ToUpper().Equals("ASSET") ||
                                  AccountType.ToUpper().Equals("CREDIT") ||

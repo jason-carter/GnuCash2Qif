@@ -5,6 +5,6 @@ namespace GnuCash.Sql2Qif.Library.DAL
 {
     public interface IAccountDAO
     {
-        IEnumerable<IAccount> Extract(string dataSource);
+        IDictionary<string, IAccount> Extract(string dataSource);
     }
 }

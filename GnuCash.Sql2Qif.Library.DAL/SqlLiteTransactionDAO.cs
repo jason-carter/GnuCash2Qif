@@ -16,10 +16,10 @@ namespace GnuCash.Sql2Qif.Library.DAL
             this.logger = logger;
         }
 
-        public IEnumerable<ITransaction> Extract(string dataSource, IEnumerable<IAccount> accounts)
+        public IDictionary<string, ITransaction> Extract(string dataSource, IDictionary<string, IAccount> accounts)
         {
             var connectionString = string.Format("DataSource={0}", dataSource);
-            var transactions = new List<ITransaction>();
+            var transactions = new Dictionary<string, ITransaction>();
 
             using (var conn = new SQLiteConnection(connectionString))
             {
@@ -42,10 +42,10 @@ namespace GnuCash.Sql2Qif.Library.DAL
                                                   Convert.ToDecimal(reader["trxValue"].ToString()),
                                                   accounts);
 
-                        var existingTrx = (Transaction)transactions.Where<ITransaction>(t => t.TransactionGuid == trx.TransactionGuid).FirstOrDefault<ITransaction>();
-
-                        if (existingTrx != null)
+                        if (transactions.ContainsKey(trx.TransactionGuid))
                         {
+                            var existingTrx = (Transaction)transactions[trx.TransactionGuid];
+
                             // Merge current transaction with the existing one. Since this is double entry bookkeeping
                             // there is usually one account entry and one (or could be more) category entry
                             if (trx.IsAccountSide)
@@ -67,17 +67,13 @@ namespace GnuCash.Sql2Qif.Library.DAL
                             }
 
                             // Update the accounts reference with the existing_trx
-                            var parentAcc = accounts.Where<IAccount>(a => a.Guid == existingTrx.AccountGuid).First<IAccount>();
-                            var oldTrx = parentAcc.Transactions.Where<ITransaction>(t => t.TransactionGuid == existingTrx.TransactionGuid).FirstOrDefault<ITransaction>();
-                            if (oldTrx != null)
-                            {
-                                parentAcc.Transactions.Remove(oldTrx);
-                            }
-                            parentAcc.Transactions.Add(existingTrx);
+                            var parentAcc = accounts[existingTrx.AccountGuid];
+                            parentAcc.Transactions.Remove(existingTrx.TransactionGuid);
+                            parentAcc.Transactions.Add(existingTrx.TransactionGuid, existingTrx);
                         }
                         else
                         {
-                            transactions.Add(trx);
+                            transactions.Add(trx.TransactionGuid, trx);
                         }
                     }
                     catch (UnknownAccountException uae)

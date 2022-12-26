@@ -9,11 +9,10 @@ namespace GnuCash.Sql2Qif.Library.BLL
         public Transaction()
         {
             AccountSplits = new List<IAccountSplit>();
-            ParentAccounts = new List<IAccount>();
         }
 
         public Transaction(string transactionGuid, string accountGuid, string accountName, DateTime datePosted, string reference,
-                           string description, string memo, string isReconciled, decimal trxValue, IEnumerable<IAccount> accounts)
+                           string description, string memo, string isReconciled, decimal trxValue, IDictionary<string, IAccount> accounts)
         {
             TransactionGuid = transactionGuid;
             AccountGuid = accountGuid;
@@ -23,23 +22,25 @@ namespace GnuCash.Sql2Qif.Library.BLL
             Description = description;
             Memo = memo;
             AccountSplits = new List<IAccountSplit>();
-            ParentAccounts = new List<IAccount>();
             IsAccountSide = false;
 
-            var account = accounts.Where<IAccount>(a => a.Guid == accountGuid).FirstOrDefault<IAccount>();
-
-            if (account == null)
+            try
             {
-                // This should never happen unless there's a problem with the gnucash database
-                throw new UnknownAccountException(accountGuid);
+                var account = accounts[accountGuid];
+
+                // Wrap the account up into a split to represent double entry accounting
+                AccountSplits.Add(new AccountSplit(account, isReconciled, trxValue));
+
+                if (account.IsAccount)
+                {
+                    IsAccountSide = true;
+                    account.Transactions.Add(transactionGuid, this);
+                }
             }
+            catch (KeyNotFoundException knfe)
+            {
+                throw new UnknownAccountException(accountGuid);
 
-            // Wrap the account up into a split to represent double entry accounting
-            AccountSplits.Add(new AccountSplit(account, isReconciled, trxValue));
-
-            if (account.IsAccount) {
-                IsAccountSide = true;
-                account.Transactions.Add(this);
             }
         }
 
@@ -52,7 +53,6 @@ namespace GnuCash.Sql2Qif.Library.BLL
         public string Memo { get; set; }
         public bool IsAccountSide { get; }
         public List<IAccountSplit> AccountSplits { get; set; }
-        public List<IAccount> ParentAccounts { get; set; }
 
         public override string ToString()
         {

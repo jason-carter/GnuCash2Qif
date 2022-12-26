@@ -18,7 +18,7 @@ namespace GnuCash.Sql2Qif.Library
             this.logger = logger;
         }
 
-        public void Write(List<IAccount> accounts, string outputFileName)
+        public void Write(IDictionary<string, IAccount> accounts, string outputFileName)
         {
             using (var writer = File.CreateText(outputFileName))
             {
@@ -31,19 +31,19 @@ namespace GnuCash.Sql2Qif.Library
             }
         }
 
-        private void WriteTransactionListByAccount(List<IAccount> accounts, StreamWriter outputFile)
+        private void WriteTransactionListByAccount(IDictionary<string, IAccount> accounts, StreamWriter outputFile)
         {
             outputFile.WriteLine("!Option:AutoSwitch"); // Indicates start of the account list (with transactions this time)
 
             // Transaction section by account
-            accounts.FindAll(n => n.IsAccount)
+            accounts.Values.ToList().FindAll(n => n.IsAccount)
                 .ToList().ForEach(n => QifAccountTransactionOutput(n, outputFile));
         }
 
         private void QifAccountTransactionOutput(IAccount acc, StreamWriter output)
         {
             QifAccountTransactionHeaderOutput(acc, output);
-            acc.Transactions.ForEach(t => QifTransactionOutput(acc, t, output));
+            acc.Transactions.Values.ToList().ForEach(t => QifTransactionOutput(acc, t, output));
         }
 
         private void QifTransactionOutput(IAccount parentAcc, ITransaction trx, StreamWriter output)
@@ -97,14 +97,14 @@ namespace GnuCash.Sql2Qif.Library
             output.WriteLine($"!Type:{QifAccountType(acc.AccountType)}");
         }
 
-        private void WriteAccountList(List<IAccount> accounts, StreamWriter outputFile)
+        private void WriteAccountList(IDictionary<string, IAccount> accounts, StreamWriter outputFile)
         {
             // Account section (asset / credit / bank / liability accounts)
 
             outputFile.WriteLine("!Option:AutoSwitch"); // Indicates start of the account list
 
             outputFile.WriteLine("!Account");
-            accounts.FindAll(n => n.IsAccount)
+            accounts.Values.ToList().FindAll(n => n.IsAccount)
                 .ToList().ForEach(n => QifAccountOutput(n, outputFile));
 
             outputFile.WriteLine("!Clear:AutoSwitch");  // Indicates end of the account list
@@ -118,11 +118,11 @@ namespace GnuCash.Sql2Qif.Library
             output.WriteLine($"^");
         }
 
-        private void WriteCategoryList(List<IAccount> accounts, StreamWriter outputFile)
+        private void WriteCategoryList(IDictionary<string, IAccount> accounts, StreamWriter outputFile)
         {
             // Category section (expense / income accounts)
             outputFile.WriteLine("!Type:Cat");
-            accounts.FindAll(n => n.IsCategory)
+            accounts.Values.ToList().FindAll(n => n.IsCategory)
                 .ToList().ForEach(n => QifCategoryOutput(n, outputFile));
         }
 

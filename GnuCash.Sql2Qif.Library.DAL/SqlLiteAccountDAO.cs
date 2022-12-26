@@ -14,10 +14,10 @@ namespace GnuCash.Sql2Qif.Library.DAL
             this.logger = logger;
         }
 
-        public IEnumerable<IAccount> Extract(string dataSource)
+        public IDictionary<string, IAccount> Extract(string dataSource)
         {
             var connectionString = string.Format("DataSource={0}", dataSource);
-            var accounts = new List<IAccount>();
+            var accounts = new Dictionary<string, IAccount>();
 
             using (var conn = new SQLiteConnection(connectionString))
             {
@@ -27,10 +27,11 @@ namespace GnuCash.Sql2Qif.Library.DAL
                 {
                     while (reader.Read())
                     {
-                        accounts.Add(new Account(reader["guid"].ToString(),
-                                                 reader["path"].ToString(),
-                                                 reader["description"].ToString(),
-                                                 reader["account_type"].ToString()));
+                        var acc = new Account(reader["guid"].ToString(),
+                                              reader["path"].ToString(),
+                                              reader["description"].ToString(),
+                                              reader["account_type"].ToString());
+                        accounts.Add(acc.Guid, acc);
                     }
                 }
             }

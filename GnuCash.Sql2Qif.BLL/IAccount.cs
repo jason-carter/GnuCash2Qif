@@ -10,6 +10,6 @@ namespace GnuCash.Sql2Qif.Library.BLL
         string AccountType { get; set; }
         bool IsAccount { get; }
         bool IsCategory { get; }
-        List<ITransaction> Transactions { get; set; }
+        Dictionary<string, ITransaction> Transactions { get; set; }
     }
 }
