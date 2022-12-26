@@ -8,8 +8,8 @@ namespace GnuCash.Sql2Qif.Library.BLL
         string Name { get; set; }
         string Description { get; set; }
         string AccountType { get; set; }
-        string Hierarchy { get; set; }
-        int HierarchyLevel { get; set; }
-        List<ITransaction> Transactions { get; set; }
+        bool IsAccount { get; }
+        bool IsCategory { get; }
+        Dictionary<string, ITransaction> Transactions { get; set; }
     }
 }

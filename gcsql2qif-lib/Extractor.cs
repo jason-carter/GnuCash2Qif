@@ -20,15 +20,15 @@ namespace GnuCash.Sql2Qif.Library
             this.trxDAO = trxDAO;
         }
 
-        public List<IAccount> ExtractData(string dataSource)
+        public IDictionary<string, IAccount> ExtractData(string dataSource)
         {
             logger.LogInformation("Extracting accounts...");
-            List<IAccount> accounts = accDAO.Extract(dataSource).ToList<IAccount>();
+            IDictionary<string, IAccount> accounts = accDAO.Extract(dataSource);
 
             // TODOO: Log some useful information like number of accounts, number of type of accounts
 
             logger.LogInformation("Extracting transactions...");
-            List<ITransaction> transactions = trxDAO.Extract(dataSource, accounts).ToList<ITransaction>();
+            IDictionary<string, ITransaction> transactions = trxDAO.Extract(dataSource, accounts);
             // TODO: Log some useful information like number of transactions, number of transactions per account
 
             return accounts;
