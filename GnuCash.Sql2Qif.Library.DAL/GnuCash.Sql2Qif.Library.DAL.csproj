@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GnuCash.Sql2Qif.BLL\GnuCash.Sql2Qif.Library.DTO.csproj" />
+    <ProjectReference Include="..\GnuCash.Sql2Qif.Library.DTO\GnuCash.Sql2Qif.Library.DTO.csproj" />
   </ItemGroup>
 
 </Project>

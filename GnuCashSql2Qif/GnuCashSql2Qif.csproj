@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\gcsql2qif-lib\GnuCash.Sql2Qif.Library.csproj" />
+    <ProjectReference Include="..\GnuCash.Sql2Qif.Library\GnuCash.Sql2Qif.Library.csproj" />
   </ItemGroup>
 
 </Project>
