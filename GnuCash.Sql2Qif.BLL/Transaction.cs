@@ -1,18 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace GnuCash.Sql2Qif.Library.BLL
+namespace GnuCash.Sql2Qif.Library.DTO
 {
     public class Transaction : ITransaction
     {
-        public Transaction()
-        {
-            AccountSplits = new List<IAccountSplit>();
-        }
-
         public Transaction(string transactionGuid, string accountGuid, string accountName, DateTime datePosted, string reference,
-                           string description, string memo, string isReconciled, decimal trxValue, IDictionary<string, IAccount> accounts)
+                   string description, string memo, string isReconciled, decimal trxValue)
         {
             TransactionGuid = transactionGuid;
             AccountGuid = accountGuid;
@@ -21,27 +14,9 @@ namespace GnuCash.Sql2Qif.Library.BLL
             Reference = reference;
             Description = description;
             Memo = memo;
-            AccountSplits = new List<IAccountSplit>();
             IsAccountSide = false;
-
-            try
-            {
-                var account = accounts[accountGuid];
-
-                // Wrap the account up into a split to represent double entry accounting
-                AccountSplits.Add(new AccountSplit(account, isReconciled, trxValue));
-
-                if (account.IsAccount)
-                {
-                    IsAccountSide = true;
-                    account.Transactions.Add(transactionGuid, this);
-                }
-            }
-            catch (KeyNotFoundException knfe)
-            {
-                throw new UnknownAccountException(accountGuid);
-
-            }
+            IsReconciled = isReconciled;
+            TrxValue = trxValue;
         }
 
         public string TransactionGuid { get; set; }
@@ -52,11 +27,13 @@ namespace GnuCash.Sql2Qif.Library.BLL
         public string Description { get; set; }
         public string Memo { get; set; }
         public bool IsAccountSide { get; }
-        public List<IAccountSplit> AccountSplits { get; set; }
+        public string IsReconciled { get; set; }
+        public decimal TrxValue { get; set; }
+        public string AccountReference { get; set; }
 
         public override string ToString()
         {
-            return $"{DatePosted.ToString("yyyy-MM-dd")} / {Description} / {Memo}";
+            return $"{DatePosted:yyyy-MM-dd} / {Description} / {Memo}";
         }
     }
 }

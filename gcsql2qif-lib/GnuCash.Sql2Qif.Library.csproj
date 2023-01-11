@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GnuCash.Sql2Qif.BLL\GnuCash.Sql2Qif.Library.BLL.csproj" />
+    <ProjectReference Include="..\GnuCash.Sql2Qif.BLL\GnuCash.Sql2Qif.Library.DTO.csproj" />
     <ProjectReference Include="..\GnuCash.Sql2Qif.Library.DAL\GnuCash.Sql2Qif.Library.DAL.csproj" />
   </ItemGroup>
 

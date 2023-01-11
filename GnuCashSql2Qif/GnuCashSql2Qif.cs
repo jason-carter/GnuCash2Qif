@@ -1,8 +1,11 @@
-﻿using System;
+﻿using CommandLine;
 using GnuCash.Sql2Qif.Library;
-using CommandLine;
-using GnuCash.Sql2Qif.Library.DAL;
+using GnuCash.Sql2Qif.Library.DAL.Readers;
+using GnuCash.Sql2Qif.Library.DTO;
+using GnuCash.Sql2Qif.Library.Outputters;
 using Microsoft.Extensions.Logging;
+using System;
+using System.IO;
 
 namespace GnuCashSql2Qif
 {
@@ -26,19 +29,15 @@ namespace GnuCashSql2Qif
                     {
                         // TODO: check the datasource files exists
                         // TODO: check if the dataource is a valid GnuCash Sqlite file
-
                         // TODO: check the output file doesn't exist, confirm overwrite if it does
 
-                        var sqlAccDao = new SqlLiteAccountDAO(loggerFactory.CreateLogger<SqlLiteAccountDAO>());
-                        var sqlTrxDao = new SqlLiteTransactionDAO(loggerFactory.CreateLogger<SqlLiteTransactionDAO>());
-
-                        var runExtract = new Extractor(loggerFactory.CreateLogger<Extractor>(), sqlAccDao, sqlTrxDao);
-
-                        var accounts = runExtract.ExtractData(a.DataSource);
-
-                        var qifLogger = loggerFactory.CreateLogger<QifCashOutputter>();
-                        var qifOutputter = new QifCashOutputter(qifLogger);
-                        qifOutputter.Write(accounts, a.Output);
+                        AccountReaderWithSqliteConnection accReader = new(a.DataSource, loggerFactory.CreateLogger<Account>());
+                        TransactionReaderWithSqliteConnection trxReader = new(a.DataSource, loggerFactory.CreateLogger<Transaction>());
+                        using (var writer = File.CreateText(a.Output))
+                        {
+                            var runExtract = new Exporter(loggerFactory.CreateLogger<Account>(), accReader, trxReader, writer);
+                            runExtract.Export();
+                        }
 
                         gnuCashLogger.LogInformation("GnuCashSql2Qif successfully completed.");
                         Environment.Exit(0);

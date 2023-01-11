@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GnuCash.Sql2Qif.Library.BLL
+namespace GnuCash.Sql2Qif.Library.DTO
 {
     public class UnknownAccountException: Exception
     {

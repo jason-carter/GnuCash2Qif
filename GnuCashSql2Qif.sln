@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28803.156
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32819.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GnuCashSql2Qif", "GnuCashSql2Qif\GnuCashSql2Qif.csproj", "{DBCBD75D-B400-44B3-AAB6-A9C834F5D541}"
 EndProject
@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GnuCash.Sql2Qif.Library", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GnuCash.Sql2Qif.Library.DAL", "GnuCash.Sql2Qif.Library.DAL\GnuCash.Sql2Qif.Library.DAL.csproj", "{0F2C119C-C9CA-4916-B5F1-6DFEEF92F144}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GnuCash.Sql2Qif.Library.BLL", "GnuCash.Sql2Qif.BLL\GnuCash.Sql2Qif.Library.BLL.csproj", "{E93F92BA-F37C-47F7-BE9A-0B600DDD39EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GnuCash.Sql2Qif.Library.DTO", "GnuCash.Sql2Qif.BLL\GnuCash.Sql2Qif.Library.DTO.csproj", "{E93F92BA-F37C-47F7-BE9A-0B600DDD39EB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
