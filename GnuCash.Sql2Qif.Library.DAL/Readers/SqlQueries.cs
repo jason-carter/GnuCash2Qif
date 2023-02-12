@@ -1,4 +1,4 @@
-﻿namespace GnuCash.Sql2Qif.Library.DAL
+﻿namespace GnuCash.Sql2Qif.Library.DAL.Readers
 {
     internal static class SqlQueries
     {
@@ -22,7 +22,7 @@
 
         public const string SqlGetTransactions = @"
             with cteAccounts(guid, name, account_type, description) AS
-            ("  + SqlGetAccountsAndCategories + @"
+            (" + SqlGetAccountsAndCategories + @"
             )
             select
                             t.guid              as TrxGuid,
@@ -41,6 +41,7 @@
             inner join      transactions  as t    on t.guid = s.tx_guid
             left outer join cteAccounts   as acc  on acc.guid = s.account_guid
             left outer join slots         as sl   on sl.obj_guid = t.guid and sl.name = 'notes'
+            where acc.guid is not null -- ignore transactions with no accounts
             order by        t.guid,
                             t.post_date asc
             ";
