@@ -1,0 +1,34 @@
+﻿<Window x:Class="GnuCash2QifGui.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GnuCash2QifGui"
+        mc:Ignorable="d"
+        Title="GnuCashSql2Qif" Height="250" Width="393.93">
+    <Grid Margin="0,0,3,2.333">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="35"/>
+        </Grid.RowDefinitions>
+        <Label x:Name="DataSourceLabel" Content="Data Source:     " Margin="10,0,288,0" VerticalAlignment="Center" Height="26"/>
+        <TextBox x:Name="DataSourceText" Margin="107,0,45,0" TextWrapping="Wrap" Text="" Height="23" VerticalAlignment="Center"/>
+        <Button x:Name="DataSourceSelectButton" Content="..." Margin="0,0,10,0" VerticalAlignment="Center" Click="DataSourceSelectButton_Click" Height="23" HorizontalAlignment="Right" Width="30"/>
+        <Label x:Name="OutputFileLabel" Content="Output File:     " HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center" Width="92" Height="26" Grid.Row="1"/>
+        <TextBox x:Name="OutputFileText" Height="23" Margin="107,0,45,0" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Grid.Row="1"/>
+        <Button x:Name="OutputFileSelectButton" Content="..." Margin="0,0,10,0" VerticalAlignment="Center" Click="OutputFileSelectButton_Click" Height="23" Grid.Row="1" HorizontalAlignment="Right" Width="30"/>
+        <Button x:Name="CloseButton" Content="Close" Margin="0,0,9,9" IsCancel="True" Click="CloseButton_Click" Width="75" Height="21" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="3"/>
+        <Button x:Name="ExportButton" Content="Export" Margin="0,0,89,9" IsDefault="True" Width="75" Height="21" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="3" Click="ExportButton_Click"/>
+        <StatusBar Grid.Row="4">
+            <ProgressBar x:Name="Progress" HorizontalAlignment="Left" Height="10" VerticalAlignment="Center" Width="100"/>
+            <Separator Height="30" VerticalAlignment="Center"/>
+            <Label x:Name="ConvertCount" Content="0 / 0"/>
+            <Separator Height="30" VerticalAlignment="Center"/>
+            <Label x:Name="StatusReport" Content="Ready" Width="222"/>
+        </StatusBar>
+
+    </Grid>
+</Window>

@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GnuCash.Sql2Qif.Library.DAL
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GnuCash.Sql2Qif.Library.DTO", "GnuCash.Sql2Qif.Library.DTO\GnuCash.Sql2Qif.Library.DTO.csproj", "{E93F92BA-F37C-47F7-BE9A-0B600DDD39EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GnuCash.Sql2Qif.Library.UnitTests", "GnuCash.Sql2Qif.Library.UnitTests\GnuCash.Sql2Qif.Library.UnitTests.csproj", "{2329F6C7-6754-4033-951F-ECD40ADD1D1C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GnuCash.Sql2Qif.Library.UnitTests", "GnuCash.Sql2Qif.Library.UnitTests\GnuCash.Sql2Qif.Library.UnitTests.csproj", "{2329F6C7-6754-4033-951F-ECD40ADD1D1C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GnuCash2QifGui", "GnuCash2QifGui\GnuCash2QifGui.csproj", "{893247CD-2C0B-4726-9680-ED8162F59C67}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{2329F6C7-6754-4033-951F-ECD40ADD1D1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2329F6C7-6754-4033-951F-ECD40ADD1D1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2329F6C7-6754-4033-951F-ECD40ADD1D1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{893247CD-2C0B-4726-9680-ED8162F59C67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{893247CD-2C0B-4726-9680-ED8162F59C67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{893247CD-2C0B-4726-9680-ED8162F59C67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{893247CD-2C0B-4726-9680-ED8162F59C67}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
