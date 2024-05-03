@@ -57,12 +57,11 @@ namespace GnuCash2QifGui
         {
             //var runExtract = new Extractor();
             //runExtract.LogEvent += HandleLogEvent;
-            var loggerFactory = LoggerFactory.Create(builder => builder.AddSimpleConsole(options =>
+            var loggerFactory = LoggerFactory.Create(builder =>
             {
-                options.IncludeScopes = true;
-                options.SingleLine = true;
-                options.TimestampFormat = "yyyy/M M/dd hh:mm:ss ";
-            }));
+                builder.ClearProviders();
+                builder.AddDebug();
+            });
             // var gnuCashLogger = loggerFactory.CreateLogger<GnuCashSql2QifGui>();
 
             status.Report($"Running...");
