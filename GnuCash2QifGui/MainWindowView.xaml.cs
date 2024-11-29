@@ -7,7 +7,7 @@ namespace GnuCash2QifGui
     /// <summary>
     /// Interaction logic for GnuCashSql2QifGui.xaml
     /// </summary>
-    public partial class MainWindow : Window, ICloseable
+    public partial class MainWindow : Window
     {
         public MainWindow()
         {
