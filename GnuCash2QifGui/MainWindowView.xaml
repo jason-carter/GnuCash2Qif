@@ -73,9 +73,15 @@
                 VerticalAlignment="Center"
                 HorizontalAlignment="Right"
                 Grid.Row="4"/>
-        <StatusBar Grid.Row="5">
-            
-        <ProgressBar x:Name="Progress"
+
+        <Label x:Name="StatusBar"
+                Content="{Binding StatusBar, Mode=OneWay}"
+                HorizontalContentAlignment="Stretch"
+                VerticalContentAlignment="Stretch"
+                Grid.Row="5"/>
+
+        <!--<StatusBar Grid.Row="5">
+            <ProgressBar x:Name="Progress"
                      HorizontalAlignment="Left"
                      VerticalAlignment="Center"
                      Height="10"
@@ -87,7 +93,7 @@
                    Content="Ready"
                    HorizontalContentAlignment="Stretch"
                    VerticalContentAlignment="Stretch"/>
-        </StatusBar>
+        </StatusBar>-->
 
     </Grid>
 </Window>
