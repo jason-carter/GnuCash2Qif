@@ -24,7 +24,12 @@ namespace GnuCashSql2Qif
                     .ParseArguments<CommandLineOptions>(args)
                     .WithParsed(a =>
                     {
-                        // TODO: check the datasource files exists
+                        // Check the datasource files exists
+                        if (!File.Exists(a.DataSource))
+                        {
+                            gnuCashLogger.LogError($"ERROR: Datasource '{a.DataSource}' does not exist!");
+                            Environment.Exit(-2);
+                        }
                         // TODO: check if the dataource is a valid GnuCash Sqlite file
                         // TODO: check the output file doesn't exist, confirm overwrite if it does
 
@@ -38,13 +43,12 @@ namespace GnuCashSql2Qif
 
                         progress?.Report("GnuCashSql2Qif successfully completed.");
                         Environment.Exit(0);
+                    })
+                    .WithNotParsed(a =>
+                    {
+                        progress?.Report("Exiting GnuCashSql2Qif because the arguments could not be parsed.");
+                        Environment.Exit(-2);
                     });
-                    // Cleaner output without the error message
-                    //.WithNotParsed(a =>
-                    //{
-                    //    //progress?.Report("ERROR", "Exiting GnuCashSql2Qif because the arguments could not be parsed.");
-                    //    //Environment.Exit(-2);
-                    //});
             }
             catch (Exception ex)
             {
