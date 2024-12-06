@@ -9,12 +9,13 @@
         Title="GnuCash SQL To QIF Converter" Height="225" Width="450">
     <Grid Margin="10,10,10,10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="1*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Label x:Name="DataSourceLabel"
                Content="Data Source"
@@ -52,48 +53,41 @@
                 Height="18"
                 Width="30"
                 Grid.Row="3" />
-        <Button x:Name="ExportButton"
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="4"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Right">
+            <StackPanel.Resources>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Margin" Value="10,20,0,0"/>
+                    <Setter Property="Width" Value="75"/>
+                    <Setter Property="Height" Value="21"/>
+                </Style>
+            </StackPanel.Resources>
+            <Button x:Name="ExportButton"
                 Content="Export"
-                Margin="0,0,88,0"
                 IsDefault="True"
-                Width="75"
-                Height="21"
-                VerticalAlignment="Center"
-                HorizontalAlignment="Right"
-                Grid.Row="4"
                 IsEnabled="{Binding IsExportEnabled, Mode=OneWay}"
                 Command="{Binding ExportCommand, Mode=OneWay}" />
-        <!--CommandParameter="{Binding ElementName=MainWindowView}"-->
-        <Button x:Name="CloseButton"
+            <Button x:Name="CloseButton"
                 Content="Close"
                 IsCancel="True"
-                Click="CloseWindow_OnClick"
-                Width="75"
-                Height="21"
-                VerticalAlignment="Center"
-                HorizontalAlignment="Right"
-                Grid.Row="4"/>
-
-        <Label x:Name="StatusBar"
-                Content="{Binding StatusBar, Mode=OneWay}"
-                HorizontalContentAlignment="Stretch"
-                VerticalContentAlignment="Stretch"
-                Grid.Row="5"/>
-
-        <!--<StatusBar Grid.Row="5">
-            <ProgressBar x:Name="Progress"
+                Click="CloseWindow_OnClick"/>
+        </StackPanel>
+        <StatusBar Grid.Row="6">
+            <!--<ProgressBar x:Name="Progress"
                      HorizontalAlignment="Left"
                      VerticalAlignment="Center"
                      Height="10"
                      Width="100"/>
             <Separator Height="30" VerticalAlignment="Center"/>
             <Label x:Name="ConvertCount" Content="0 / 0"/>
-            <Separator Height="30" VerticalAlignment="Center"/>
-            <Label x:Name="StatusReport"
-                   Content="Ready"
+            <Separator Height="30" VerticalAlignment="Center"/>-->
+            <Label x:Name="StatusBar"
+                   Padding="0"
+                   Content="{Binding StatusBar, Mode=OneWay}"
                    HorizontalContentAlignment="Stretch"
                    VerticalContentAlignment="Stretch"/>
-        </StatusBar>-->
-
+        </StatusBar>
     </Grid>
 </Window>
