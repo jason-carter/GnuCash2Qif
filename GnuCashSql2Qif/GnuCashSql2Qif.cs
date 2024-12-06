@@ -27,7 +27,7 @@ namespace GnuCashSql2Qif
                         // Check the datasource files exists
                         if (!File.Exists(a.DataSource))
                         {
-                            gnuCashLogger.LogError($"ERROR: Datasource '{a.DataSource}' does not exist!");
+                            progress?.Report($"ERROR: Datasource '{a.DataSource}' does not exist!");
                             Environment.Exit(-2);
                         }
                         // TODO: check if the dataource is a valid GnuCash Sqlite file
