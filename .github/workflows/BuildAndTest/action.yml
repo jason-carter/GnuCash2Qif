@@ -17,10 +17,13 @@ runs:
         dotnet-version: 8.0.x
   
   - name: Install dependencies
+    shell: PowerShell
     run: dotnet restore
   
   - name: Build
+    shell: PowerShell
     run: dotnet build --configuration ${{ inputs.configuration }}
   
   - name: Test with the dotnet CLI
+    shell: PowerShell
     run: dotnet test
