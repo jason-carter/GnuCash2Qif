@@ -1,4 +1,4 @@
-name: Build GnuCash2Qif
+name: Build Development GnuCash2Qif
 
 on:
   push:
@@ -16,6 +16,5 @@ jobs:
 
     - name: Build and Test
       uses: "./.github/workflows/BuildAndTest"
-      # with:
-      #   version: v1.0.0
-      #   namespace: "stage"
+      with:
+        configuration: "Debug"

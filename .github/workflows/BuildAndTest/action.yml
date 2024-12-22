@@ -1,28 +1,26 @@
 name: Build and Test
 
-# Were we can define the inputs that our action will accept
-# inputs:
-#   version: 
-#     required: true
-#   namespace:
-#     required: true
+# Action parameters
+inputs:
+  configuration:
+    required: true
 
 runs:
   using: "composite"
   steps:
-#   - name: deploy stack
-#     uses: somelibrary/deploy@master
-#     with:
-#       version: ${{ inputs.version }}
-#       namespace: ${{ inputs.namespace}}
-  - uses: actions/checkout@v4
+
+  # - uses: actions/checkout@v4
+  
   - name: Setup .NET
     uses: actions/setup-dotnet@v3
     with:
         dotnet-version: 8.0.x
+  
   - name: Install dependencies
     run: dotnet restore
+  
   - name: Build
-    run: dotnet build --configuration Release
+    run: dotnet build --configuration ${{ inputs.configuration }}
+  
   - name: Test with the dotnet CLI
     run: dotnet test
