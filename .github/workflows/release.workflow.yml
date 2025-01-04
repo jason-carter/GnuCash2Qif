@@ -1,10 +1,9 @@
-name: Build GnuCash2Qif (Development)
+name: Build GnuCash2Qif (Release)
 
 on:
   push:
     branches:
-      - '*'
-      - '!main'
+      - 'main'
 jobs:
   build:
 
@@ -17,4 +16,10 @@ jobs:
     - name: Build and Test
       uses: "./.github/workflows/BuildAndTest"
       with:
-        configuration: "Debug"
+        configuration: "Relase"
+
+    # Package CLI single executable
+
+    # Package WPF single executable (if possible)
+
+    # Create GitHub Release
