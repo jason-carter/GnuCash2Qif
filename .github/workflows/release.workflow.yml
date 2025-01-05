@@ -13,13 +13,39 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Build and Test
+    - name: Build and Test GnuCash SQL To QIF
       uses: "./.github/workflows/BuildAndTest"
       with:
-        configuration: "Relase"
+        configuration: "Release"
 
     # Package CLI single executable
+    - name: Publish GnuCash SQL To QIF Executable
+      uses: "./.github/workflows/Publish"
+      with:
+        configuration: "Release"
+        runtime: win-x64
+        projectfile: .\GnuCashSql2Qif\GnuCashSql2Qif.csproj
 
-    # Package WPF single executable (if possible)
+    # Package WPF single executable
+    - name: Publish GnuCash SQL To QIF Executable
+      uses: "./.github/workflows/Publish"
+      with:
+        configuration: "Release"
+        runtime: win-x64
+        projectfile: .\GnuCash2QifGui\GnuCash2QifGui.csproj
+
+    # RIDs for other Operating Systems:
+    # Windows RIDs
+    # win-x86
+    # win-arm64
+
+    # Mac  RIDs
+    # osx-x64 (Minimum OS version is macOS 10.12 Sierra)
+    # osx-arm64
+
+    # Linux RIDs
+    # linux-x64 
+    # linux-arm
+    # linux-arm64
 
     # Create GitHub Release

@@ -1,4 +1,4 @@
-name: Build and Test
+name: Build and Test GnuCash SQL To QIF
 
 # Action parameters
 inputs:
@@ -9,8 +9,6 @@ runs:
   using: "composite"
   steps:
 
-  # - uses: actions/checkout@v4
-  
   - name: Setup .NET
     uses: actions/setup-dotnet@v3
     with:
