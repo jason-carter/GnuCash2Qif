@@ -1,5 +1,5 @@
 ﻿using GnuCash.Sql2Qif.Library.DTO;
-using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,7 +8,7 @@ namespace GnuCash.Sql2Qif.Library.Outputters
 {
     internal class QifAccountOutputter : QifOutputterBase<IAccount>
     {
-        public QifAccountOutputter(ILogger<IAccount> logger, StreamWriter writer) : base(logger, writer) { }
+        public QifAccountOutputter(IProgress<string> progress, StreamWriter writer) : base(progress, writer) { }
 
         public override void Write(IDictionary<string, IAccount> accounts)
         {

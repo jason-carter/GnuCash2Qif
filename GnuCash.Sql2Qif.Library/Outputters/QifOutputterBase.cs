@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -6,12 +6,12 @@ namespace GnuCash.Sql2Qif.Library.Outputters
 {
     abstract public class QifOutputterBase<T>
     {
-        protected readonly ILogger logger;
+        protected readonly IProgress<string> progress;
         protected readonly StreamWriter writer;
 
-        public QifOutputterBase(ILogger<T> logger, StreamWriter writer)
+        public QifOutputterBase(IProgress<string> progress, StreamWriter writer)
         {
-            this.logger = logger;
+            this.progress = progress;
             this.writer = writer;
         }
 
@@ -34,7 +34,7 @@ namespace GnuCash.Sql2Qif.Library.Outputters
 
             if (qifAccType == "?")
             {
-                logger.LogWarning($"Unknown account type: {accType}");
+                progress?.Report($"WARNING: Unknown account type: {accType}");
             }
 
             return qifAccType;
@@ -48,7 +48,7 @@ namespace GnuCash.Sql2Qif.Library.Outputters
 
             if (qifCatType == "?")
             {
-                logger.LogWarning($"Unknown category type: {catType}");
+                progress?.Report($"WARNING: Unknown category type: {catType}");
             }
 
             return qifCatType;

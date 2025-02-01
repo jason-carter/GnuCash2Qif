@@ -1,5 +1,4 @@
 ﻿using GnuCash.Sql2Qif.Library.DTO;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -9,7 +8,7 @@ namespace GnuCash.Sql2Qif.Library.DAL.Mappers
 {
     class TransactionMapper : MapperBase<string, ITransaction>
     {
-        public TransactionMapper(ILogger<ITransaction> logger) : base(logger) { }
+        public TransactionMapper(IProgress<string> progress) : base(progress) { }
 
         protected override KeyValuePair<string, ITransaction> Map(IDataRecord record)
         {

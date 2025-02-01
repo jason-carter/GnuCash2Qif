@@ -1,0 +1,20 @@
+name: Build GnuCash2Qif (Development)
+
+on:
+  push:
+    branches:
+      - '*'
+      - '!main'
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Build and Test
+      uses: "./.github/workflows/BuildAndTest"
+      with:
+        configuration: "Debug"

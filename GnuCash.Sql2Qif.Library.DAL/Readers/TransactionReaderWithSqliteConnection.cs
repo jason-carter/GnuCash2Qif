@@ -1,6 +1,6 @@
 ﻿using GnuCash.Sql2Qif.Library.DAL.Mappers;
 using GnuCash.Sql2Qif.Library.DTO;
-using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.ObjectModel;
 using System.Data;
 
@@ -8,18 +8,18 @@ namespace GnuCash.Sql2Qif.Library.DAL.Readers
 {
     public class TransactionReaderWithSqliteConnection : ReaderWithSqliteConnection<string, ITransaction>
     {
-        private readonly ILogger<ITransaction> logger;
+        private readonly IProgress<string> progress;
 
-        public TransactionReaderWithSqliteConnection(string datasource, ILogger<ITransaction> logger) : base(datasource)
+        public TransactionReaderWithSqliteConnection(string datasource, IProgress<string> progress) : base(datasource)
         {
-            this.logger = logger;
+            this.progress = progress;
         }
 
     protected override string CommandText => SqlQueries.SqlGetTransactions;
 
         protected override CommandType CommandType => CommandType.Text;
 
-        protected override MapperBase<string, ITransaction> GetMapper() => new TransactionMapper(logger);
+        protected override MapperBase<string, ITransaction> GetMapper() => new TransactionMapper(progress);
 
         protected override Collection<IDataParameter> GetParameters(IDbCommand command)
         {

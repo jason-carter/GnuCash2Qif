@@ -2,7 +2,7 @@
   "profiles": {
     "GnuCashSql2Qif": {
       "commandName": "Project",
-      "commandLineArgs": "-d \"C:/Users/jjcar/Downloads/gnucashtoqif/accounts.sql.gnucash.sqlite\" -o \"C:/Users/jjcar/Downloads/gnucashtoqif/output.qif\""
+      "commandLineArgs": "-d \"C:/Users/jjcar/Downloads/gnucashtoqif/accounts.sql.gnucash.sqlite\" -o \"C:/Users/jjcar/Downloads/gnucashtoqif/output-tst.qif\""
     }
   }
 }

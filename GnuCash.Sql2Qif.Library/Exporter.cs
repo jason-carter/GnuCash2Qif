@@ -1,7 +1,7 @@
 ﻿using GnuCash.Sql2Qif.Library.DAL.Readers;
 using GnuCash.Sql2Qif.Library.DTO;
 using GnuCash.Sql2Qif.Library.Outputters;
-using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,7 +10,7 @@ namespace GnuCash.Sql2Qif.Library
 {
     public class Exporter
     {
-        private readonly ILogger logger;
+        private readonly IProgress<string> progress;
         private readonly ReaderBase<string, IAccount> accReader;
         private readonly ReaderBase<string, ITransaction> trxReader;
 
@@ -18,38 +18,38 @@ namespace GnuCash.Sql2Qif.Library
         private readonly QifOutputterBase<IAccount> categoryWriter;
         private readonly QifOutputterBase<IAccount> transactionWriter;
 
-        public Exporter(ILogger<IAccount> logger, ReaderBase<string, IAccount> accReader, ReaderBase<string, ITransaction> trxReader, StreamWriter outputter)
+        public Exporter(IProgress<string> progress, ReaderBase<string, IAccount> accReader, ReaderBase<string, ITransaction> trxReader, StreamWriter outputter)
         {
-            this.logger = logger;
+            this.progress = progress;
             this.accReader = accReader;
             this.trxReader = trxReader;
 
-            accountWriter = new QifAccountOutputter(logger, outputter);
-            categoryWriter = new QifCategoryOutputter(logger, outputter);
-            transactionWriter = new QifTransactionOutputter(logger, outputter);
+            accountWriter = new QifAccountOutputter(progress, outputter);
+            categoryWriter = new QifCategoryOutputter(progress, outputter);
+            transactionWriter = new QifTransactionOutputter(progress, outputter);
         }
 
         public void Export()
         {
-            logger.LogInformation("Extracting all accounts...");
+            progress?.Report("Extracting all accounts...");
             IDictionary<string, IAccount> accounts = accReader.Execute();
 
-            logger.LogInformation("Extracting list of transactions...");
+            progress?.Report("Extracting list of transactions...");
             IDictionary<string, ITransaction> transactions = trxReader.Execute();
 
 
-            logger.LogInformation("Assigning transactions to their accounts...");
+            progress?.Report("Assigning transactions to their accounts...");
             accounts.Values.ToList().ForEach(acc => acc.Transactions = transactions.Values.Where(t => t.AccountGuid == acc.Guid).ToList());
 
-            logger.LogInformation("Add transaction account references...");
+            progress?.Report("Add transaction account references...");
             transactions.Values.ToList().ForEach(trx => trx.AccountReference = SetAccountReference(trx, transactions, accounts));
 
-            logger.LogInformation("Writing to output...");
-            logger.LogInformation("Writing category section...");
+            progress?.Report("Writing to output...");
+            progress?.Report("Writing category section...");
             categoryWriter.Write(accounts);
-            logger.LogInformation("Writing accounts section...");
+            progress?.Report("Writing accounts section...");
             accountWriter.Write(accounts);
-            logger.LogInformation("Writing transactions by accounts...");
+            progress?.Report("Writing transactions by accounts...");
             transactionWriter.Write(accounts);
         }
 
@@ -66,7 +66,7 @@ namespace GnuCash.Sql2Qif.Library
 
             if (trxSplit == null)
             {
-                logger.LogWarning($"Could not find the account split for ({trx})");
+                progress?.Report($"WARNING: Could not find the account split for ({trx})");
                 return "";
             }
 
