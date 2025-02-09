@@ -12,6 +12,15 @@ With these in mind I thought I would try some other personal finance package to 
 
 As part of experimenting in other languages, there's also a version of this utility written in Java ([jGnuCash2Qif](https://github.com/Jason-Carter/jGnuCash2Qif)) which is based on an older version of this repo, but is fully functional; and there's a Python version ([gnuCashExtractor](https://github.com/jason-carter/gnuCashExtractor) but see the dev branch) which extracts from sqllite into memory, but doesn't save the in-memory data to a file, QIF or otherwise.
 
+## Download Latest Version
+
+To download the latest version of GnuCashSql2Qif head over to the releases page and choose one of the following:
+
+* `GnuCash2QifGui.exe` - This is a Windows-only Graphical User Interface (GUI) which is the easiest way to run this application and convert your files.
+* `GnuCashSql2Qif.exe` - this is the Command Line (CLI) Version for those who prefer the command line. Currently it is Windows only, Mac and Linux versions can be build following the instructions below.
+
+For those who do wish to build their own version, the source code for this release is also available in ZIP and TAR.GZ format (although you may also prefet to download the repo tor the 1.0 tag).
+
 ## Build Prerequisites
 
 To build GnuCash2Qif you will require the following installed on your system:
