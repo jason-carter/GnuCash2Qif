@@ -1,8 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using GnuCash.Sql2Qif.Library.DTO;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace GnuCash.Sql2Qif.Library.DTO.Tests
+namespace GnuCash.Sql2Qif.Library.UnitTests
 {
-    [TestClass()]
+    [TestClass]
     public class AccountTests
     {
         [TestMethod()]
@@ -15,7 +16,8 @@ namespace GnuCash.Sql2Qif.Library.DTO.Tests
             Account acc = new(guid, name, description, accountType);
 
             // Assert
-            Assert.AreEqual(acc.IsAccount, true);
+            Assert.IsTrue(acc.IsAccount);
+            Assert.IsFalse(acc.IsCategory);
         }
 
         [TestMethod()]
@@ -27,7 +29,8 @@ namespace GnuCash.Sql2Qif.Library.DTO.Tests
             Account acc = new(guid, name, description, accountType);
 
             // Assert
-            Assert.AreEqual(acc.IsCategory, true);
+            Assert.IsTrue(acc.IsCategory);
+            Assert.IsFalse(acc.IsAccount);
         }
 
         [TestMethod()]

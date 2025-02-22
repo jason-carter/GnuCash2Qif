@@ -10,47 +10,47 @@ namespace GnuCash.Sql2Qif.Library
 {
     public class Exporter
     {
-        private readonly IProgress<string> progress;
-        private readonly ReaderBase<string, IAccount> accReader;
-        private readonly ReaderBase<string, ITransaction> trxReader;
+        private readonly IProgress<string> _progress;
+        private readonly ReaderBase<string, IAccount> _accReader;
+        private readonly ReaderBase<string, ITransaction> _trxReader;
 
-        private readonly QifOutputterBase<IAccount> accountWriter;
-        private readonly QifOutputterBase<IAccount> categoryWriter;
-        private readonly QifOutputterBase<IAccount> transactionWriter;
+        private readonly QifOutputterBase<IAccount> _accountWriter;
+        private readonly QifOutputterBase<IAccount> _categoryWriter;
+        private readonly QifOutputterBase<IAccount> _transactionWriter;
 
         public Exporter(IProgress<string> progress, ReaderBase<string, IAccount> accReader, ReaderBase<string, ITransaction> trxReader, StreamWriter outputter)
         {
-            this.progress = progress;
-            this.accReader = accReader;
-            this.trxReader = trxReader;
+            this._progress = progress;
+            this._accReader = accReader;
+            this._trxReader = trxReader;
 
-            accountWriter = new QifAccountOutputter(progress, outputter);
-            categoryWriter = new QifCategoryOutputter(progress, outputter);
-            transactionWriter = new QifTransactionOutputter(progress, outputter);
+            _accountWriter = new QifAccountOutputter(progress, outputter);
+            _categoryWriter = new QifCategoryOutputter(progress, outputter);
+            _transactionWriter = new QifTransactionOutputter(progress, outputter);
         }
 
         public void Export()
         {
-            progress?.Report("Extracting all accounts...");
-            IDictionary<string, IAccount> accounts = accReader.Execute();
+            _progress?.Report("Extracting all accounts...");
+            IDictionary<string, IAccount> accounts = _accReader.Execute();
 
-            progress?.Report("Extracting list of transactions...");
-            IDictionary<string, ITransaction> transactions = trxReader.Execute();
+            _progress?.Report("Extracting list of transactions...");
+            IDictionary<string, ITransaction> transactions = _trxReader.Execute();
 
 
-            progress?.Report("Assigning transactions to their accounts...");
+            _progress?.Report("Assigning transactions to their accounts...");
             accounts.Values.ToList().ForEach(acc => acc.Transactions = transactions.Values.Where(t => t.AccountGuid == acc.Guid).ToList());
 
-            progress?.Report("Add transaction account references...");
+            _progress?.Report("Add transaction account references...");
             transactions.Values.ToList().ForEach(trx => trx.AccountReference = SetAccountReference(trx, transactions, accounts));
 
-            progress?.Report("Writing to output...");
-            progress?.Report("Writing category section...");
-            categoryWriter.Write(accounts);
-            progress?.Report("Writing accounts section...");
-            accountWriter.Write(accounts);
-            progress?.Report("Writing transactions by accounts...");
-            transactionWriter.Write(accounts);
+            _progress?.Report("Writing to output...");
+            _progress?.Report("Writing category section...");
+            _categoryWriter.Write(accounts);
+            _progress?.Report("Writing accounts section...");
+            _accountWriter.Write(accounts);
+            _progress?.Report("Writing transactions by accounts...");
+            _transactionWriter.Write(accounts);
         }
 
         private string SetAccountReference(ITransaction trx, 
@@ -66,7 +66,7 @@ namespace GnuCash.Sql2Qif.Library
 
             if (trxSplit == null)
             {
-                progress?.Report($"WARNING: Could not find the account split for ({trx})");
+                _progress?.Report($"WARNING: Could not find the account split for ({trx})");
                 return "";
             }
 

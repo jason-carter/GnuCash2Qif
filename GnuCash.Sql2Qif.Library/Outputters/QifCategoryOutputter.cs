@@ -13,16 +13,16 @@ namespace GnuCash.Sql2Qif.Library.Outputters
         public override void Write(IDictionary<string, IAccount> accounts)
         {
             // Category section (expense / income accounts)
-            writer.WriteLine("!Type:Cat");
-            accounts.Values.Where(n => n.IsCategory).ToList().ForEach(cat => QifCategoryOutput(cat));
+            Writer.WriteLine("!Type:Cat");
+            accounts.Values.Where(n => n.IsCategory).ToList().ForEach(QifCategoryOutput);
         }
 
         private void QifCategoryOutput(IAccount cat)
         {
-            writer.WriteLine($"N{cat.Name}");
-            writer.WriteLine($"D{cat.Description}");
-            writer.WriteLine($"{QifCategoryType(cat.AccountType)}");
-            writer.WriteLine($"^");
+            Writer.WriteLine($"N{cat.Name}");
+            Writer.WriteLine($"D{cat.Description}");
+            Writer.WriteLine($"{QifCategoryType(cat.AccountType)}");
+            Writer.WriteLine($"^");
         }
     }
 }
