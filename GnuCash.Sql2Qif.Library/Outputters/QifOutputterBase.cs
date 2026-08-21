@@ -6,13 +6,13 @@ namespace GnuCash.Sql2Qif.Library.Outputters
 {
     abstract public class QifOutputterBase<T>
     {
-        protected readonly IProgress<string> progress;
-        protected readonly StreamWriter writer;
+        private readonly IProgress<string> _progress;
+        protected readonly StreamWriter Writer;
 
         public QifOutputterBase(IProgress<string> progress, StreamWriter writer)
         {
-            this.progress = progress;
-            this.writer = writer;
+            this._progress = progress;
+            this.Writer = writer;
         }
 
         public abstract void Write(IDictionary<string, T> accounts);
@@ -34,7 +34,7 @@ namespace GnuCash.Sql2Qif.Library.Outputters
 
             if (qifAccType == "?")
             {
-                progress?.Report($"WARNING: Unknown account type: {accType}");
+                _progress?.Report($"WARNING: Unknown account type: {accType}");
             }
 
             return qifAccType;
@@ -48,7 +48,7 @@ namespace GnuCash.Sql2Qif.Library.Outputters
 
             if (qifCatType == "?")
             {
-                progress?.Report($"WARNING: Unknown category type: {catType}");
+                _progress?.Report($"WARNING: Unknown category type: {catType}");
             }
 
             return qifCatType;

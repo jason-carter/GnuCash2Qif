@@ -12,10 +12,10 @@ namespace GnuCash.Sql2Qif.Library.Outputters
 
         public override void Write(IDictionary<string, IAccount> accounts)
         {
-            writer.WriteLine("!Option:AutoSwitch"); // Indicates start of the account list (with transactions this time)
+            Writer.WriteLine("!Option:AutoSwitch"); // Indicates start of the account list (with transactions this time)
 
             // Transaction section by account
-            accounts.Values.Where(n => n.IsAccount).ToList().ForEach(acc => QifAccountTransactionOutput(acc));
+            accounts.Values.Where(n => n.IsAccount).ToList().ForEach(QifAccountTransactionOutput);
         }
 
         private void QifAccountTransactionOutput(IAccount acc)
@@ -26,30 +26,30 @@ namespace GnuCash.Sql2Qif.Library.Outputters
 
         private void QifTransactionOutput(IAccount parentAcc, ITransaction trx)
         {
-            writer.WriteLine($"D{trx.DatePosted.ToString("MM/d/yyyy")}"); // TODO: Check QIF's supported date formats
+            Writer.WriteLine($"D{trx.DatePosted.ToString("MM/d/yyyy")}"); // TODO: Check QIF's supported date formats
             if (trx.Reference != null && !trx.Reference.Equals(string.Empty))
             {
-                writer.WriteLine($"N{trx.Reference}");
+                Writer.WriteLine($"N{trx.Reference}");
             }
-            writer.WriteLine($"U{trx.TrxValue}");
-            writer.WriteLine($"T{trx.TrxValue}");
-            writer.WriteLine($"P{trx.Description}");
-            writer.WriteLine($"M{trx.Memo}");
+            Writer.WriteLine($"U{trx.TrxValue}");
+            Writer.WriteLine($"T{trx.TrxValue}");
+            Writer.WriteLine($"P{trx.Description}");
+            Writer.WriteLine($"M{trx.Memo}");
             if (IsReconciled(trx.IsReconciled))
             {
-                writer.WriteLine($"C*");
+                Writer.WriteLine($"C*");
             }
-            writer.WriteLine($"L{trx.AccountReference}");
-            writer.WriteLine($"^");
+            Writer.WriteLine($"L{trx.AccountReference}");
+            Writer.WriteLine($"^");
         }
 
         private void QifAccountTransactionHeaderOutput(IAccount acc)
         {
-            writer.WriteLine($"!Account");
-            writer.WriteLine($"N{acc.Name}");
-            writer.WriteLine($"T{QifAccountType(acc.AccountType)}");
-            writer.WriteLine($"^");
-            writer.WriteLine($"!Type:{QifAccountType(acc.AccountType)}");
+            Writer.WriteLine($"!Account");
+            Writer.WriteLine($"N{acc.Name}");
+            Writer.WriteLine($"T{QifAccountType(acc.AccountType)}");
+            Writer.WriteLine($"^");
+            Writer.WriteLine($"!Type:{QifAccountType(acc.AccountType)}");
         }
     }
 }

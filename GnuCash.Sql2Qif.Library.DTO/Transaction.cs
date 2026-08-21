@@ -4,8 +4,15 @@ namespace GnuCash.Sql2Qif.Library.DTO
 {
     public class Transaction : ITransaction
     {
-        public Transaction(string transactionGuid, string accountGuid, string accountName, DateTime datePosted, string reference,
-                   string description, string memo, string isReconciled, decimal trxValue)
+        public Transaction(string transactionGuid,
+            string accountGuid,
+            string accountName,
+            DateTime datePosted,
+            string reference,
+            string description,
+            string memo,
+            string isReconciled,
+            decimal trxValue)
         {
             TransactionGuid = transactionGuid;
             AccountGuid = accountGuid;

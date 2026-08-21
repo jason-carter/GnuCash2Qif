@@ -2,7 +2,7 @@
 {
     internal static class SqlQueries
     {
-        public const string SqlGetAccounts = @"
+        private const string SqlGetAccounts = @"
             select      acc.guid, acc.name, acc.account_type, acc.description
             from        accounts  acc
             inner join  accounts  p   on p.guid = acc.parent_guid
@@ -12,13 +12,13 @@
             where acc.account_type in ('ASSET', 'CREDIT', 'BANK', 'LIABILITY')
             ";
 
-        public const string SqlGetCategories = @"
+        private const string SqlGetCategories = @"
             select      a.guid, a.name, a.account_type, a.description
             from        accounts a
             where       a.account_type in ('EXPENSE', 'INCOME')
             ";
 
-        public const string SqlGetAccountsAndCategories = SqlGetAccounts + " union all " + SqlGetCategories;
+        private const string SqlGetAccountsAndCategories = SqlGetAccounts + " union all " + SqlGetCategories;
 
         public const string SqlGetTransactions = @"
             with cteAccounts(guid, name, account_type, description) AS
@@ -46,7 +46,7 @@
                             t.post_date asc
             ";
 
-        public const string SqlGetAccountsAndCategoryHiearchy = @"
+        public const string SqlGetAccountsAndCategoryHierarchy = @"
             with recursive cteAccounts(guid, name, account_type, parent_guid, code, description, hidden, placeholder, level, path) AS
             (
                 select guid, name, account_type, parent_guid, code,

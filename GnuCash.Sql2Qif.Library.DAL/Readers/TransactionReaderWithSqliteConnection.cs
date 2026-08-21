@@ -8,18 +8,18 @@ namespace GnuCash.Sql2Qif.Library.DAL.Readers
 {
     public class TransactionReaderWithSqliteConnection : ReaderWithSqliteConnection<string, ITransaction>
     {
-        private readonly IProgress<string> progress;
+        private readonly IProgress<string> _progress;
 
         public TransactionReaderWithSqliteConnection(string datasource, IProgress<string> progress) : base(datasource)
         {
-            this.progress = progress;
+            this._progress = progress;
         }
 
     protected override string CommandText => SqlQueries.SqlGetTransactions;
 
         protected override CommandType CommandType => CommandType.Text;
 
-        protected override MapperBase<string, ITransaction> GetMapper() => new TransactionMapper(progress);
+        protected override MapperBase<string, ITransaction> GetMapper() => new TransactionMapper(_progress);
 
         protected override Collection<IDataParameter> GetParameters(IDbCommand command)
         {

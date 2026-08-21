@@ -30,7 +30,7 @@ namespace GnuCashSql2Qif
                             progress?.Report($"ERROR: Datasource '{a.DataSource}' does not exist!");
                             Environment.Exit(-2);
                         }
-                        // TODO: check if the dataource is a valid GnuCash Sqlite file
+                        // TODO: check if the datasource is a valid GnuCash Sqlite file
                         // TODO: check the output file doesn't exist, confirm overwrite if it does
 
                         AccountReaderWithSqliteConnection accReader = new(a.DataSource, progress);
@@ -44,7 +44,7 @@ namespace GnuCashSql2Qif
                         progress?.Report("GnuCashSql2Qif successfully completed.");
                         Environment.Exit(0);
                     })
-                    .WithNotParsed(a =>
+                    .WithNotParsed(_ =>
                     {
                         progress?.Report("Exiting GnuCashSql2Qif because the arguments could not be parsed.");
                         Environment.Exit(-2);
