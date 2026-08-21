@@ -78,7 +78,7 @@ namespace GnuCash2QifGui
             AccountReaderWithSqliteConnection accReader = new(this.DataSource, progress);
             TransactionReaderWithSqliteConnection trxReader = new(this.DataSource, progress);
 
-            using var writer = File.CreateText(this.OutputFile);
+            await using var writer = File.CreateText(this.OutputFile);
 
             var runExtract = new Exporter(progress, accReader, trxReader, writer);
             await Task.Run(() => runExtract.Export());

@@ -5,17 +5,17 @@ namespace GnuCash.Sql2Qif.Library.DAL.Readers
 {
     abstract public class ReaderWithSqliteConnection<TKey, TValue> : ReaderBase<TKey, TValue>
     {
-        private string m_connectionString;
+        private readonly string _mConnectionString;
 
         public ReaderWithSqliteConnection(string datasource)
         {
-            m_connectionString = string.Format("DataSource={0}", datasource);
+            _mConnectionString = $"DataSource={datasource}";
         }
 
         protected override IDbConnection GetConnection()
         {
             // update to get your connection here  
-            IDbConnection connection = new SQLiteConnection(m_connectionString);
+            IDbConnection connection = new SQLiteConnection(_mConnectionString);
             return connection;
         }
     }
