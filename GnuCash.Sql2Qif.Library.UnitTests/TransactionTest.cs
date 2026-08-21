@@ -32,7 +32,7 @@ namespace GnuCash.Sql2Qif.Library.UnitTests
                                                 trxValue);
 
             // Assert
-            Assert.AreEqual(trx.ToString(), "2020-01-02 / Test Description / Test Memo");
+            Assert.AreEqual("2020-01-02 / Test Description / Test Memo", trx.ToString());
         }
     }
 }
